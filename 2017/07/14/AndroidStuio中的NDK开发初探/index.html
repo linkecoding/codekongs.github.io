@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NDK," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="代码控" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="一直想学习一点NDK开发的知识，但是迟迟没有动手，正好有一个NDK相关的项目机会，便查阅了一些资料，遂将学习的一些心得方法记录于此。">
+<meta name="keywords" content="NDK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidStuio中的NDK开发初探">
+<meta property="og:url" content="http://www.codekong.cn/2017/07/14/AndroidStuio中的NDK开发初探/index.html">
+<meta property="og:site_name" content="代码控">
+<meta property="og:description" content="一直想学习一点NDK开发的知识，但是迟迟没有动手，正好有一个NDK相关的项目机会，便查阅了一些资料，遂将学习的一些心得方法记录于此。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720172412404?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720172533943?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720173601343?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720172817249?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720173819791?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720173202999?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720173246792?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720173318021?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170720173046025?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-11T14:18:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AndroidStuio中的NDK开发初探">
+<meta name="twitter:description" content="一直想学习一点NDK开发的知识，但是迟迟没有动手，正好有一个NDK相关的项目机会，便查阅了一些资料，遂将学习的一些心得方法记录于此。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170720172412404?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.codekong.cn/2017/07/14/AndroidStuio中的NDK开发初探/"/>
+
+
+
+
+
+  <title>AndroidStuio中的NDK开发初探 | 代码控</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d828b53b3d89a2a12af4b9db0030499f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">代码控</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夫唯不争,故莫能与之争</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2017/07/14/AndroidStuio中的NDK开发初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AndroidStuio中的NDK开发初探</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-14T14:14:11+08:00">
+                2017-07-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  一直想学习一点NDK开发的知识，但是迟迟没有动手，正好有一个NDK相关的项目机会，便查阅了一些资料，遂将学习的一些心得方法记录于此。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前段时间由于做比赛的事，一直都没时间写博客，现在终于可以补上一篇了，一直想学习一点NDK开发的知识，但是迟迟没有动手，正好有一个NDK相关的项目机会，便查阅了一些资料，遂将学习的一些心得方法记录于此。</p>
+</blockquote>
+<p>其实写这篇博客还有一个目的，在我搜寻NDK相关学习资料的过程中，大部分都是基于eclipse开发的，所以有些过时，而现在Google推荐使用AndroidStudio+CMake的方式进行NDK开发，所以想更新一下有些知识，便于大家学习参考。</p>
+<p>首先说说这次的开发工具及版本<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">AndroidStudio</span> 2<span class="selector-class">.3</span><span class="selector-class">.3</span></span><br><span class="line"><span class="selector-tag">NDK</span> 15<span class="selector-class">.1</span><span class="selector-class">.4</span></span><br><span class="line"><span class="selector-tag">CMake</span> 3<span class="selector-class">.6</span><span class="selector-class">.4</span></span><br><span class="line"><span class="selector-tag">Genymotion</span>  模拟器</span><br></pre></td></tr></table></figure></p>
+<h4 id="一、相关概念介绍"><a href="#一、相关概念介绍" class="headerlink" title="一、相关概念介绍"></a>一、相关概念介绍</h4><p>1 . 什么是NDK</p>
+<blockquote>
+<p>NDK是一个让开发人员在android应用中嵌入使用本地代码编写的组件的工具集。 Android应用运行在Dalvik虚拟机中。NDK允许开发人员使用本地代码语言(例如C和C++)实现应用的部分功能。</p>
+</blockquote>
+<p>上面是比较官方的介绍，通俗点来讲，就是帮助我们可以在Android应用中使用C/C++来完成特定功能的一套工具。</p>
+<p>2 . NDK的应用场景</p>
+<blockquote>
+<p>不是说什么场景下我们都要使用NDK来开发Android的功能，由于NDK开发在一定程度上加大了项目的开发难度，我们应该综合考虑各种因素和条件，在特定场景下选用NDK来开发Android的特定功能，下面就是一些NDK适用的场景。</p>
+</blockquote>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">1 </span>. 重要核心代码保护。由于java层代码很容易反编译，而C/C++代码反汇编难度很大，所以对于重要的代码，可以使用C/C++来编写，Android去调用即可。</span><br><span class="line"></span><br><span class="line"><span class="symbol">2 </span>. Android中需要用到第三方的C/C++库。由于很多优秀的第三方库(比如FFmpeg)都是使用C/C++来编写的，我们想要使用它们，就必须通过NDK的方式来操作。</span><br><span class="line"></span><br><span class="line"><span class="symbol">3 </span>. 便于代码的移植。比如我们对于一些核心的公共组件(比如微信开源的的Mars)，可能需要写一套代码在多个平台上运行(比如在Android和iOS上共用一个库)，那么就需要选用NDK的方式。</span><br><span class="line"></span><br><span class="line"><span class="symbol">4 </span>. 对于音视频处理、图像处理这种计算量比较大追求性能的场景，也需要使用到NDK。</span><br></pre></td></tr></table></figure>
+<p>3 . 什么是交叉编译</p>
+<blockquote>
+<p>交叉编译通俗一点讲，就是在一个平台上生产在另一个平台上可执行的代码。比如我们在电脑上为一些硬件开发驱动，最终编译出的代码需要在硬件上使用。还有我们在电脑上将C/C++代码编译成相应的库，然后在ARM、x86、mips等平台上使用。NDK中就我们提供了交叉编译的工具，帮助我们可以将我们编写的C/C++代码生成各个平台需要的库。</p>
+</blockquote>
+<p>4 . 什么是jni</p>
+<blockquote>
+<p>JNI的全称是Java Native Interface，它允许Java语言可以按照一定的规则去调用其他语言，与其进行交互。</p>
+</blockquote>
+<p>jni的实现流程如下:</p>
+<p><strong>编写Java代码(*.java) —————&gt; </strong> <strong>编译生成字节码文件(*.class) —————&gt; </strong> <strong>产生C头文件(*.h) —————&gt; </strong> <strong>编写jni实现代码(*.c)  —————&gt; </strong> <strong> 编译成链接库(*.so)</strong></p>
+<p>5 . 什么是链接库</p>
+<blockquote>
+<p>链接库可以简单理解为函数库，就是我们的C/C++代码编译生成的产物，供我们的java进行调用，同时，它又分为动态链接库和静态链接库。</p>
+</blockquote>
+<p>动态链接库 : 在程序运行时才载入所需要的库，所以控制比较灵活，整个可执行文件的体积较小。</p>
+<p>静态链接库 : 在程序的链接阶段，将其引用的代码也一并打包在了最终的可执行文件中，这样做的好处是可以不再依赖与环境，移植方便，但是这样做会使可执行文件体积较大。在Android中的静态链接库是<strong>.a</strong>文件。</p>
+<p>6 . 什么是CMake</p>
+<blockquote>
+<p>CMake是一款开源的跨平台自动化构建系统，它通过<strong>CMakeLists.txt</strong>来声明构建的行为，控制整个编译流程，我们在接下来的NDK开发中将会使用它配合Gradle来进行相关开发。</p>
+</blockquote>
+<h4 id="二、配置NDK开发环境"><a href="#二、配置NDK开发环境" class="headerlink" title="二、配置NDK开发环境"></a>二、配置NDK开发环境</h4><blockquote>
+<p>俗话说 <strong>工欲善其事必先利其器</strong>，接下来，我们先配置一下我们在开发NDK过程中要使用到的一些工具。</p>
+</blockquote>
+<p>1 . 安装NDK</p>
+<p>打开AndroidStudio，在如图所示的地方找到 <strong>SDK Tools</strong>, 勾选 <strong>NDK、LLDB、CMake</strong>,然后点击 <strong>Apply</strong> ，等待其下载安装完成，便配置好了基本的开发环境。</p>
+<p><img src="http://img.blog.csdn.net/20170720172412404?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="安装NDK"></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">安装的工具中NDK和<span class="built_in">CMake</span>上面已经介绍过了，LLDB是一款在开发NDK过程中的调试器，这篇博客中将不会介绍。</span><br></pre></td></tr></table></figure>
+<p>做完了上面的步骤我们就可以开始我们的第一个NDK程序了。</p>
+<h4 id="三、创建第一个NDK程序"><a href="#三、创建第一个NDK程序" class="headerlink" title="三、创建第一个NDK程序"></a>三、创建第一个NDK程序</h4><blockquote>
+<p>下面我将以图示加序号的方式来说明新建步骤。</p>
+</blockquote>
+<p>1 . 新建一个项目，填写基本信息，记得勾选<strong>Include C++  support</strong>,便于AndroidStudio为我们生成一些默认的配置。</p>
+<p><img src="http://img.blog.csdn.net/20170720172533943?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="新建项目1"></p>
+<p><img src="http://img.blog.csdn.net/20170720173601343?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="新建项目2"><br>2 . 接下来的几个步骤就选择默认设置</p>
+<p>3 . 到最后一步如图，<strong>C++ Standard</strong> 选择 <strong>Toolchain Default</strong>，其它不变即可。</p>
+<p><img src="http://img.blog.csdn.net/20170720172817249?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="新建项目3"></p>
+<p>说明:</p>
+<p>(a) C++ Standard是让我们选择C++标准，我们使用默认的CMake的设置</p>
+<p>(b) Exceptions Support是添加C++中对于异常的处理，如果选中，Android Studio会<br>将 -fexceptions标志添加到模块级build.gradle文件的cppFlags中，Gradle会将其传递到CMake。</p>
+<p>(c) Runtime Type Information Support是启用支持RTTI，请选中此复选框。如果选中，Android Studio会将-frtti标志添加到模块级build.gradle文件的cppFlags中，Gradle会将其传递到 CMake。</p>
+<p>新建好的项目如图</p>
+<p><img src="http://img.blog.csdn.net/20170720173819791?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="新建好的项目"></p>
+<p>下面我们看看这个默认的项目中AndroidStudio都为我们做了哪些事 :</p>
+<p>(1) 在<strong>app</strong> 模块中新建了一个cpp文件夹用来放置我们的C/C++文件，此处默认的文件为<strong>native-lib.cpp</strong></p>
+<p>native-lib.cpp文件内容:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_codekong_ndkdemo_MainActivity_stringFromJNI(</span><br><span class="line">        JNIEnv *env,</span><br><span class="line">        jobject <span class="comment">/* this */</span>) &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> hello = <span class="string">"Hello from C++"</span>;</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF(hello.c_str());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中先是引入了固定的头文件<code>jni.h</code>，然后是引入了代码中需要用到的头文件，至于后面的返回字符串，我们在后面的时候将会讲到，现在只需要知道它就是返回了<code>Hello from C++</code>这个字符串即可。</p>
+<p>上面的<code>extern &quot;C&quot; 是告诉编译器按照C语言的规则来编译我们下面的代码</code></p>
+<p>(2) 在<strong>app</strong> 模块下新建了一个<strong>CMakeLists.txt</strong>文件用于定义一些构建行为</p>
+<p>CMakeLists.txt文件内容 :</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># For more information about using CMake with Android Studio, read the</span></span><br><span class="line"><span class="comment"># documentation: https://d.android.com/studio/projects/add-native-code.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sets the minimum version of CMake required to build the native library.</span></span><br><span class="line"></span><br><span class="line">cmake_minimum_required(VERSION <span class="number">3.4</span>.<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Creates and names a library, sets it as either STATIC</span></span><br><span class="line"><span class="comment"># or SHARED, and provides the relative paths to its source code.</span></span><br><span class="line"><span class="comment"># You can define multiple libraries, and CMake builds them for you.</span></span><br><span class="line"><span class="comment"># Gradle automatically packages shared libraries with your APK.</span></span><br><span class="line"></span><br><span class="line">add_library( <span class="comment"># Sets the name of the library.</span></span><br><span class="line">             native-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line"></span><br><span class="line">             <span class="comment"># Sets the library as a shared library.</span></span><br><span class="line">             SHARED</span><br><span class="line"></span><br><span class="line">             <span class="comment"># Provides a relative path to your source file(s).</span></span><br><span class="line">             src/main/cpp/native-<span class="class"><span class="keyword">lib</span>.<span class="title">cpp</span> )</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Searches for a specified prebuilt library and stores the path as a</span></span><br><span class="line"><span class="comment"># variable. Because CMake includes system libraries in the search path by</span></span><br><span class="line"><span class="comment"># default, you only need to specify the name of the public NDK library</span></span><br><span class="line"><span class="comment"># you want to add. CMake verifies that the library exists before</span></span><br><span class="line"><span class="comment"># completing its build.</span></span><br><span class="line"></span><br><span class="line">find_library( <span class="comment"># Sets the name of the path variable.</span></span><br><span class="line">              log-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line"></span><br><span class="line">              <span class="comment"># Specifies the name of the NDK library that</span></span><br><span class="line">              <span class="comment"># you want CMake to locate.</span></span><br><span class="line">              log )</span><br><span class="line"></span><br><span class="line"><span class="comment"># Specifies libraries CMake should link to your target library. You</span></span><br><span class="line"><span class="comment"># can link multiple libraries, such as libraries you define in this</span></span><br><span class="line"><span class="comment"># build script, prebuilt third-party libraries, or system libraries.</span></span><br><span class="line"></span><br><span class="line">target_link_libraries( <span class="comment"># Specifies the target library.</span></span><br><span class="line">                       native-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line"></span><br><span class="line">                       <span class="comment"># Links the target library to the log library</span></span><br><span class="line">                       <span class="comment"># included in the NDK.</span></span><br><span class="line">                       $&#123;log-<span class="class"><span class="keyword">lib</span>&#125; )</span></span><br></pre></td></tr></table></figure>
+<p>上面的完成的有注释的内容，但其中最核心的也就几句，下面分别做介绍:</p>
+<p><code>cmake_minimum_required(VERSION 3.4.1)</code> 用来设置在编译本地库时我们需要的最小的cmake版本，AndroidStudio自动生成，我们几乎不需要自己管。</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">add_library( <span class="comment"># Sets the name of the library.</span></span><br><span class="line">             native-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line"></span><br><span class="line">             <span class="comment"># Sets the library as a shared library.</span></span><br><span class="line">             SHARED</span><br><span class="line"></span><br><span class="line">             <span class="comment"># Provides a relative path to your source file(s).</span></span><br><span class="line">             src/main/cpp/native-<span class="class"><span class="keyword">lib</span>.<span class="title">cpp</span> )</span></span><br></pre></td></tr></table></figure>
+<p><code>add_library</code>用来设置编译生成的本地库的名字为<code>native-lib</code>，<code>SHARED</code>表示编译生成的是<code>动态链接库</code>(这个概念前面已经提到过了)，<code>src/main/cpp/native-lib.cpp</code>表示参与编译的文件的路径，这里面可以写多个文件的路径。</p>
+<p><code>find_library</code> 是用来添加一些我们在编译我们的本地库的时候需要依赖的一些库，由于cmake已经知道系统库的路径，所以我们这里只是指定使用<code>log</code>库，然后给<code>log</code>库起别名为<code>log-lib</code>便于我们后面引用，此处的<code>log</code>库是我们后面调试时需要用来打log日志的库，是NDK为我们提供的。</p>
+<p><code>target_link_libraries</code> 是为了关联我们自己的库和一些第三方库或者系统库，这里把我们把自己的库<code>native-lib</code>库和<code>log</code>库关联起来。</p>
+<p>(3)在 <strong>app</strong> 模块对应的<code>build.gradle</code>文件中增加了一些配置，如下:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">apply</span> plugin: <span class="string">'com.android.application'</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    <span class="attribute">compileSdkVersion</span> <span class="number">25</span></span><br><span class="line">    buildToolsVersion <span class="string">"25.0.3"</span></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        <span class="attribute">applicationId</span> <span class="string">"com.codekong.ndkdemo"</span></span><br><span class="line">        minSdkVersion <span class="number">15</span></span><br><span class="line">        targetSdkVersion <span class="number">25</span></span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">"1.0"</span></span><br><span class="line">        testInstrumentationRunner <span class="string">"android.support.test.runner.AndroidJUnitRunner"</span></span><br><span class="line">        externalNativeBuild &#123;</span><br><span class="line">            <span class="section">cmake</span> &#123;</span><br><span class="line">                <span class="attribute">cppFlags</span> <span class="string">""</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        <span class="section">release</span> &#123;</span><br><span class="line">            <span class="attribute">minifyEnabled</span> <span class="literal">false</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    externalNativeBuild &#123;</span><br><span class="line">        <span class="section">cmake</span> &#123;</span><br><span class="line">            <span class="attribute">path</span> <span class="string">"CMakeLists.txt"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="attribute">compile</span> fileTree(dir: <span class="string">'libs'</span>, include: [<span class="string">'*.jar'</span>])</span><br><span class="line">    androidTestCompile(<span class="string">'com.android.support.test.espresso:espresso-core:2.2.2'</span>, &#123;</span><br><span class="line">        <span class="attribute">exclude</span> group: <span class="string">'com.android.support'</span>, module: <span class="string">'support-annotations'</span></span><br><span class="line">    &#125;)</span><br><span class="line">    compile <span class="string">'com.android.support:appcompat-v7:25.3.1'</span></span><br><span class="line">    compile <span class="string">'com.android.support.constraint:constraint-layout:1.0.2'</span></span><br><span class="line">    testCompile <span class="string">'junit:junit:4.12'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要的变化就两点:<br>(a) 在 <code>android</code> 的大括号内增加了 <code>externalNativeBuild</code>标签</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">externalNativeBuild</span> &#123;</span><br><span class="line">    <span class="section">cmake</span> &#123;</span><br><span class="line">        <span class="attribute">cppFlags</span> <span class="string">""</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的<code>cppFlags</code>里面的内容为空，这里其实就是配置了我们在新建项目的时候的第(3)步中讲到的，如果我们勾选了异常支持和RTTI支持，这里就会有相关的配置信息。</p>
+<p>(b) 使用 <code>externalNativeBuild</code> 来指定 <code>CMakeLists.txt</code>文件的路径，由于build.gradle文件和<code>CMakeLists.txt</code>文件在同一目录下，所以此处就直接写文件名啦。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">externalNativeBuild</span> &#123;</span><br><span class="line">    <span class="section">cmake</span> &#123;</span><br><span class="line">        <span class="attribute">path</span> <span class="string">"CMakeLists.txt"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(4) 最终在<code>MainActivity.java</code> 文件中我们看到了函数的调用过程如下:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Used to load the 'native-lib' library on application startup.</span></span><br><span class="line">    static &#123;</span><br><span class="line">        <span class="type">System</span>.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(<span class="type">R</span>.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Example of a call to a native method</span></span><br><span class="line">        <span class="type">TextView</span> tv = (<span class="type">TextView</span>) findViewById(<span class="type">R</span>.id.sample_text);</span><br><span class="line">        tv.setText(stringFromJNI());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * A native method that is implemented by the 'native-lib' native library,</span></span><br><span class="line"><span class="comment">     * which is packaged with this application.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    public native <span class="type">String</span> stringFromJNI();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到其实这里就主要做了三步操作:<br>(a)使用 <code>native</code> 关键字声明了一个本地方法 <code>stringFromJNI()</code></p>
+<p>(b)使用<code>loadLibrary()</code>方法载入我们编译生成的动态链接库,这里要注意，虽然我们生成的动态链接库名称为<code>libnative-lib.so</code>,但是此处我们只需要写 <code>native-lib</code>,即就是我们在<code>CMakeLists.txt</code>文件中指定的名称，其中的lib前缀和.so后缀是系统为我们添加的。</p>
+<p>(c)我们在布局文件中放了一个<code>TextView</code>,然后将函数返回的字符串放到了<code>TextView</code>中。</p>
+<p>我们对比一下我们声明的native方法和最终我们的ndk帮我们生成的c++代码的函数名:</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们声明的native方法名</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String <span class="title">stringFromJNI</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//ndk帮我们生成的c++方法名</span></span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_codekong_ndkdemo_MainActivity_stringFromJNI(JNIEnv *env, jobject <span class="comment">/* this */</span>)</span><br></pre></td></tr></table></figure>
+<p>我们看到ndk生成的方法名是以 <strong>Java_包名_类名_方法名</strong> 的形式，其实这个方法名是<code>javah</code>帮助我们生成的。</p>
+<p>注:我们对于新创建的项目可以点击菜单栏的<code>Build</code>——&gt; <code>Make Project</code>来先编译项目，然后在 <strong>&lt;项目目录&gt;\app\build\intermediates\cmake\debug\obj\armeabi</strong> 下面就可以看到生成的动态链接库。由于我们没有指定我们需要生成什么平台的so库，所以系统帮我们生成了各个平台的库，分别放在对应的文件夹下面。</p>
+<p>好了，以上就是我们使用AndroidStudio创建的第一个项目的分析，了解了上面这些，我们就基本了解了NDK开发的的一般步骤。</p>
+<h4 id="四、NDK开发中常用的函数"><a href="#四、NDK开发中常用的函数" class="headerlink" title="四、NDK开发中常用的函数"></a>四、NDK开发中常用的函数</h4><blockquote>
+<p>上面我们只是看了AndroidStudio为我们生成的代码，还没有自己动手写一行代码，下面我们就开始动手写代码啦。下面我们就自己新建一个项目，主要学习一下NDK里面的字符串操作和数组的操作。</p>
+</blockquote>
+<p>1 . 新建项目，这个过程，我们在上一步的 <strong>三、创建第一个NDK程序</strong> 中已经讲到了，这里不再赘述。</p>
+<p>2 . 删除项目为我们自动生成的<code>native-lib.cpp</code>文件，然后在<code>cpp</code>目录下新建一个<code>hello-lib.c</code>的文件，这时候AndroidStudio就会提醒我们这个文件没有在<code>CMakeLists.txt</code>文件中进行配置，所以我们去改动一下该文件，改动如下:</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION <span class="number">3.4</span>.<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">add_library(hello-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line">            SHARED</span><br><span class="line">            src/main/cpp/hello-<span class="class"><span class="keyword">lib</span>.<span class="title">c</span> )</span></span><br><span class="line"></span><br><span class="line">find_library(log-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line">             log )</span><br><span class="line"></span><br><span class="line">target_link_libraries(hello-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line">                      $&#123;log-<span class="class"><span class="keyword">lib</span>&#125; )</span></span><br></pre></td></tr></table></figure>
+<p>这里我们把我们新建的<code>hello-lib.c</code>的路径加入到了<code>CMakeLists.txt</code>文件中,而且也将log库与我们的库关联了起来，其他的具体信息前面已经讲过了。</p>
+<p>3 . 我们在<code>MainActivity.java</code>文件对应的布局文件中放入一个<code>TextView</code>,并且在<code>MainActivity.java</code>中获取它。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.codekong.ndkdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.<span class="type">AppCompatActivity</span>;</span><br><span class="line"><span class="keyword">import</span> android.os.<span class="type">Bundle</span>;</span><br><span class="line"><span class="keyword">import</span> android.widget.<span class="type">TextView</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(<span class="type">R</span>.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="type">TextView</span> tv = (<span class="type">TextView</span>) findViewById(<span class="type">R</span>.id.sample_text);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4 . 接着我们在<code>MainActivity.java</code>文件中写一个native函数<code>sayHelloWorld()</code>,并将其返回的字符串设置给<code>TextView</code>,然后使用<code>loadLibrary</code>载入我们的自定义库。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.codekong.ndkdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.<span class="type">AppCompatActivity</span>;</span><br><span class="line"><span class="keyword">import</span> android.os.<span class="type">Bundle</span>;</span><br><span class="line"><span class="keyword">import</span> android.widget.<span class="type">TextView</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Used to load the 'native-lib' library on application startup.</span></span><br><span class="line">    static &#123;</span><br><span class="line">        <span class="type">System</span>.loadLibrary(<span class="string">"hello-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(<span class="type">R</span>.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="type">TextView</span> tv = (<span class="type">TextView</span>) findViewById(<span class="type">R</span>.id.sample_text);</span><br><span class="line">        <span class="comment">//将返回值设置给TextView</span></span><br><span class="line">        tv.setText(sayHelloWorld());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//自定义的native函数</span></span><br><span class="line">    public native <span class="type">String</span> sayHelloWorld();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>5 .  见证AndroidStudio强大的地方到了，我们在我们声明的<code>sayHelloWorld()</code>函数上按住<code>Alt+Enter</code>，就会自动生成C++代码，但是，这里存在一个问题，初次生成，AndroidStudio会创建一个jni文件夹，然后在里面创建<code>hello-lib.c</code>文件，并且自动生成对应的C代码，但是，由于我们在<code>CMakeLists.txt</code>中指定的路径为<code>src/main/cpp/hello-lib.c</code>,所以我们这里直接将我们的<code>src/main/jni/hello-lib.c</code>中的代码拷贝到<code>src/main/cpp/hello-lib.c</code>中，并将jni目录删除即可。hello-lib.c中的内容如下:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;jni.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">JNIEXPORT </span><span class="keyword">jstring </span><span class="keyword">JNICALL</span></span><br><span class="line"><span class="keyword">Java_com_codekong_ndkdemo_MainActivity_sayHelloWorld(JNIEnv </span>*env, <span class="keyword">jobject </span><span class="keyword">instance) </span>&#123;</span><br><span class="line"></span><br><span class="line">    return (*env)-&gt;NewStringUTF(env, <span class="string">"Hello World"</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，我们拿到了jni环境指针，然后调用其NewStringUTF()方法，传入env指针和我们需要的字符串，便可以了。</p>
+<p>运行程序，便可以看到界面上显示<code>Hello World</code>。</p>
+<p>下面我们开始看看java中的类型和native类型的对应关系:<br><img src="http://img.blog.csdn.net/20170720173202999?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="基本数据类型"></p>
+<p><img src="http://img.blog.csdn.net/20170720173246792?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="引用类型"></p>
+<p><img src="http://img.blog.csdn.net/20170720173318021?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="数组类型"></p>
+<p>可以看出上面的类型对应关系还是十分清楚的，其实我们在<code>jni.h</code>文件中就可以看到上述的定义。</p>
+<p>下面我们主要说说字符串的使用和数组的使用</p>
+<p>(1)字符串的使用</p>
+<p>其实上面新建的项目就已经演示了返回字符串的例子,使用<code>(*env)-&gt;NewStringUTF(env, &quot;Hello World&quot;);</code>即可返回字符串结果，下面在看看如何处理java传入的字符串。通过jni将Java传入的字符串写入文件。</p>
+<p>(a) 在Mainactivity中添加如下代码</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">writeFile</span><span class="params">(String filePath)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>(b) 在<code>hello-lib.c</code>中生成如下代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT void JNICALL</span><br><span class="line">Java_com_codekong_ndkdemo_MainActivity_writeFile(<span class="name">JNIEnv</span> *env, jobject instance, jstring filePath_) &#123;</span><br><span class="line">    const char *filePath = (<span class="name">*env</span>)-&gt;GetStringUTFChars(<span class="name">env</span>, filePath_, <span class="number">0</span>)<span class="comment">;</span></span><br><span class="line">    (<span class="name">*env</span>)-&gt;ReleaseStringUTFChars(<span class="name">env</span>, filePath_, filePath)<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是AndroidStudio生成的代码，可以看出它主要用到了 <code>(*env)-&gt;GetStringUTFChars(env, filePath_, 0);</code> 来将java传入的字符串转化为C语言的char指针，最后又使用<code>(*env)-&gt;ReleaseStringUTFChars(env, filePath_, filePath);</code>将我们的指针指向的空间释放。</p>
+<p>(c)我们可以在这个基础上写一个写入文件的小例子,代码如下:</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT void JNICALL</span><br><span class="line">Java_com_codekong_ndkdemo_MainActivity_writeFile(JNIEnv *<span class="keyword">env</span>, jobject <span class="keyword">instance</span>, jstring filePath_) &#123;</span><br><span class="line">    const char *filePath = (*<span class="keyword">env</span>)-&gt;GetStringUTFChars(<span class="keyword">env</span>, filePath_, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    FILE *<span class="keyword">file</span> = <span class="keyword">fopen</span>(filePath, <span class="string">"a+"</span>);</span><br><span class="line"></span><br><span class="line">    char data[] = <span class="string">"I am a boy"</span>;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="keyword">fwrite</span>(data, strlen(data), <span class="number">1</span>, <span class="keyword">file</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">file</span> != NULL) &#123;</span><br><span class="line">        <span class="keyword">fclose</span>(<span class="keyword">file</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    (*<span class="keyword">env</span>)-&gt;ReleaseStringUTFChars(<span class="keyword">env</span>, filePath_, filePath);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码记得加头文件</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>(d)还要记得在AndroidMainfest.xml文件中添加文件读写权限，然后在MainActivity.java中调用native方法</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    System.loadLibrary(<span class="string">"hello-lib"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">    String filePath = <span class="string">"/mnt/sdcard/boys.txt"</span>;</span><br><span class="line">    Toast.makeText(MainActivity.<span class="keyword">this</span>, filePath, Toast.LENGTH_SHORT).show();</span><br><span class="line">    updateFile(filePath);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意:由于我这里使用的是Genymotion模拟器，所以那样写文件路径就表示文件管理器根目录。</p>
+<p>运行上面的程序，就可以在文件管理器根目录下发现<code>boys.txt</code>，并在其中发现我们写入的字符串。</p>
+<p>(2) 数组的使用</p>
+<blockquote>
+<p>现在我们看看我们如何在jni中使用数组。</p>
+</blockquote>
+<p>数组的操作主要有以下两种方式(我们这里仍然用我们刚才的<code>hello-lib.c</code>文件测试):</p>
+<p>(a) 直接操作数组指针。</p>
+<p>我们现在看看在<code>MainActivity.java</code> 和 <code>hello-lib.c</code>文件中的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"MainActivity"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] testData = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; testData.length; i++) &#123;</span><br><span class="line">            Log.d(TAG, <span class="string">"testData: origin "</span> + testData[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//测试</span></span><br><span class="line">        operationArray(testData);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; testData.length; i++) &#123;</span><br><span class="line">            Log.d(TAG, <span class="string">"testData: after "</span> + testData[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//声明方法</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">operationArray</span><span class="params">(<span class="keyword">int</span>[] args)</span></span>;</span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="comment">//载入库</span></span><br><span class="line">            System.loadLibrary(<span class="string">"hello-lib"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码写完，我们仍然使用<code>Alt+Enter</code>快捷键生成我们c语言的代码，如下:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT void JNICALL</span><br><span class="line">Java_com_codekong_ndkdemo_MainActivity_operationArray(<span class="name">JNIEnv</span> *env, jobject instance,</span><br><span class="line">                                                      jintArray args_) &#123;</span><br><span class="line">    //获得数组指针</span><br><span class="line">    jint *args = (<span class="name">*env</span>)-&gt;GetIntArrayElements(<span class="name">env</span>, args_, NULL)<span class="comment">;</span></span><br><span class="line">    //获得数组长度</span><br><span class="line">    jint len = (<span class="name">*env</span>)-&gt;GetArrayLength(<span class="name">env</span>, args_)<span class="comment">;</span></span><br><span class="line">    int i = <span class="number">0</span><span class="comment">;</span></span><br><span class="line">    for (<span class="comment">; i &lt; len; ++i) &#123;</span></span><br><span class="line">        ++args[i]<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    //释放</span><br><span class="line">    (<span class="name">*env</span>)-&gt;ReleaseIntArrayElements(<span class="name">env</span>, args_, args, <span class="number">0</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终结果: 数组中的每个元素都被加1</p>
+<p>上面其实还是很好理解的，大家可以查看注释。</p>
+<p>(b) 将传入的数组先拷贝一份，操作完以后再将数据拷贝回原数组</p>
+<p>这次还是像上面一样，只是我们在C++中换了一种操作数组的方式</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明我们的本地方法,其余代码与上面一致</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">operationArray2</span><span class="params">(<span class="keyword">int</span>[] args)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] testData2 = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; testData2.length; i++) &#123;</span><br><span class="line">    Log.d(TAG, <span class="string">"testData2: origin "</span> + testData2[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">operationArray2(testData2);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; testData2.length; i++) &#123;</span><br><span class="line">    Log.d(TAG, <span class="string">"testData2: afetr "</span> + testData2[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT void JNICALL</span><br><span class="line">Java_com_codekong_ndkdemo_MainActivity_operationArray2(JNIEnv *env, jobject instance,</span><br><span class="line">                                                       jintArray args_) &#123;</span><br><span class="line">    <span class="comment">//声明一个native层的数组，用于拷贝原数组</span></span><br><span class="line">    jint nativeArray[<span class="number">5</span>];</span><br><span class="line">    <span class="comment">//将传入的jintArray数组拷贝到nativeArray</span></span><br><span class="line">    (*env)-&gt;GetIntArrayRegion(env, args_, <span class="number">0</span>, <span class="number">5</span>, nativeArray);</span><br><span class="line">    int i = <span class="number">0</span>;</span><br><span class="line">    for (; i &lt; <span class="number">5</span>; ++i) &#123;</span><br><span class="line">        <span class="comment">//给每个元素加5</span></span><br><span class="line">        nativeArray[i] += <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将操作完成的结果拷贝回jintArray</span></span><br><span class="line">    (*env)-&gt;SetIntArrayRegion(env, args_, <span class="number">0</span>, <span class="number">5</span>, nativeArray);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终结果:数组中每个元素都加5</p>
+<p>注意: 我们上面的两种方式返回值都是void，也就是说我们对数组的改变都是最终改变了原来数组的值。</p>
+<h4 id="五、NDK自定义配置"><a href="#五、NDK自定义配置" class="headerlink" title="五、NDK自定义配置"></a>五、NDK自定义配置</h4><blockquote>
+<p>下面我们说一下NDK里面最常见的几点配置方法，这里也是记录方便自己以后查阅</p>
+</blockquote>
+<p>1 . 添加多个参与编译的C/C++文件</p>
+<p>首先，我们发现我们上面的例子都是涉及到一个C++文件，那么我们实际的项目不可能只有一个C++文件，所以我们首先要改变<code>CMakeLists.txt</code>文件，如下 :</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add_library( HelloNDK</span><br><span class="line">             SHARED</span><br><span class="line">             src<span class="meta-keyword">/main/</span>cpp/HelloNDK.c</span><br><span class="line">             src<span class="meta-keyword">/main/</span>cpp/HelloJNI.c)</span><br></pre></td></tr></table></figure>
+<p>简单吧，简单明了，但是这里要注意的是，你在写路径的时候一定要注意当前的<code>CMakeLists.txt</code>在项目中的位置，上面的路径是相对于<code>CMakeLists.txt</code> 写的。</p>
+<p>2 . 我们想编译出多个so库</p>
+<p>大家会发现，我们上面这样写，由于只有一个<code>CMakeLists.txt</code>文件，所以我们会把所有的C/C++文件编译成一个so库，这是很不合适的，这里我们就试着学学怎么编译出多个so库。</p>
+<p>先放上我的项目文件夹结构图:</p>
+<p><img src="http://img.blog.csdn.net/20170720173046025?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="文件夹结构"></p>
+<p>然后看看我们每个<code>CMakeLists.txt</code>文件是怎么写的:</p>
+<p>one文件夹内的<code>CMakeLists.txt</code>文件的内容:</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ADD_LIBRARY(one-<span class="class"><span class="keyword">lib</span> <span class="title">SHARED</span> <span class="title">one</span>-<span class="title">lib</span>.<span class="title">c</span>)</span></span><br><span class="line"></span><br><span class="line">target_link_libraries(one-<span class="class"><span class="keyword">lib</span> <span class="title">log</span>)</span></span><br></pre></td></tr></table></figure>
+<p>two文件夹内的<code>CMakeLists.txt</code>文件的内容:</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ADD_LIBRARY(two-<span class="class"><span class="keyword">lib</span> <span class="title">SHARED</span> <span class="title">two</span>-<span class="title">lib</span>.<span class="title">c</span>)</span></span><br><span class="line"></span><br><span class="line">target_link_libraries(two-<span class="class"><span class="keyword">lib</span> <span class="title">log</span>)</span></span><br></pre></td></tr></table></figure>
+<p>app目录下的<code>CMakeLists.txt</code>文件的内容</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Sets the minimum version of CMake required to build the native library.</span></span><br><span class="line"></span><br><span class="line">cmake_minimum_required(VERSION <span class="number">3.4</span>.<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">add_library( HelloNDK</span><br><span class="line">             SHARED</span><br><span class="line">             src/main/cpp/HelloNDK.c</span><br><span class="line">             src/main/cpp/HelloJNI.c)</span><br><span class="line">find_library( <span class="comment"># Sets the name of the path variable.</span></span><br><span class="line">              log-<span class="class"><span class="keyword">lib</span></span></span><br><span class="line">              <span class="comment"># Specifies the name of the NDK library that</span></span><br><span class="line">              <span class="comment"># you want CMake to locate.</span></span><br><span class="line">              log )</span><br><span class="line">target_link_libraries(HelloNDK log)</span><br><span class="line">ADD_SUBDIRECTORY(src/main/cpp/one)</span><br><span class="line">ADD_SUBDIRECTORY(src/main/cpp/two)</span><br></pre></td></tr></table></figure>
+<p>通过以上的配置我们可以看出<code>CMakeLists.txt</code> 文件的配置是支持继承的,所以我们在子配置文件中只是写了不同的特殊配置项的配置，最后在最上层的文件中配置子配置文件的路径即可，现在编译项目，我们会在 <strong>&lt;项目目录&gt;\app\build\intermediates\cmake\debug\obj\armeabi</strong> 下面就可以看到生成的动态链接库。而且是三个动态链接库</p>
+<p>3 . 更改动态链接库生成的目录</p>
+<p>我们是不是发现上面的so库的路径太深了，不好找，没事，可以配置，我们只需要在顶层的<code>CMakeLists.txt</code>文件中加入下面这句就可以了</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#设置生成的so动态库最后输出的路径</span></span><br><span class="line">set(CMAKE_LIBRARY_OUTPUT_DIRECTORY <span class="variable">$&#123;PROJECT_SOURCE_DIR&#125;</span><span class="regexp">/src/m</span>ain<span class="regexp">/jniLibs/</span><span class="variable">$&#123;ANDROID_ABI&#125;</span>)</span><br></pre></td></tr></table></figure>
+<p>然后我们就可以在app/src/main下看到<code>jniLibs</code>目录，在其中看到我们的动态链接库的文件夹和文件(这里直接配置到了系统默认的路径，如果配置到其他路径需要在gradle文件中使用<code>jinLibs.srcDirs = [&#39;newDir&#39;]</code>进行指定)。</p>
+<h4 id="六、NDK错误调试"><a href="#六、NDK错误调试" class="headerlink" title="六、NDK错误调试"></a>六、NDK错误调试</h4><blockquote>
+<p>在开发的过程中，难免会遇到bug，那怎么办，打log啊，下面我们就谈谈打log和看log的姿势。</p>
+</blockquote>
+<p>1 . 在C/C++文件中打log</p>
+<p>(1) 在C/C++文件中添加头文件</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/log.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>上面是打印日志的头文件，必须添加</p>
+<p>(2) 添加打印日志的宏定义和TAG</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//log定义</span></span><br><span class="line">#define  <span class="keyword">LOG</span>    <span class="string">"JNILOG"</span> <span class="comment">// 这个是自定义的LOG的TAG</span></span><br><span class="line">#define  LOGD(<span class="params">...</span>)  __android_log_print(ANDROID_LOG_DEBUG,<span class="keyword">LOG</span>,__VA_ARGS__) <span class="comment">// 定义LOGD类型</span></span><br><span class="line">#define  LOGI(<span class="params">...</span>)  __android_log_print(ANDROID_LOG_INFO,<span class="keyword">LOG</span>,__VA_ARGS__) <span class="comment">// 定义LOGI类型</span></span><br><span class="line">#define  LOGW(<span class="params">...</span>)  __android_log_print(ANDROID_LOG_WARN,<span class="keyword">LOG</span>,__VA_ARGS__) <span class="comment">// 定义LOGW类型</span></span><br><span class="line">#define LOGE(<span class="params">...</span>)  __android_log_print(ANDROID_LOG_ERROR,<span class="keyword">LOG</span>,__VA_ARGS__) <span class="comment">// 定义LOGE类型</span></span><br><span class="line">#define LOGF(<span class="params">...</span>)  __android_log_print(ANDROID_LOG_FATAL,<span class="keyword">LOG</span>,__VA_ARGS__) <span class="comment">// 定义LOGF类型</span></span><br></pre></td></tr></table></figure>
+<p>上面的日志级别和Android中的log是对应的。</p>
+<p>(3) 经过上面两步，我们就可以打印日志啦</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> <span class="built_in">len</span> = <span class="number">5</span>;</span><br><span class="line">LOGE(<span class="string">"我是log %d"</span>, <span class="built_in">len</span>);</span><br></pre></td></tr></table></figure>
+<p>现在我们就可以在logcat中看到我们打印的日志啦。</p>
+<p>2 . 查看报错信息</p>
+<p>首先我们先手动写一个错误，我们在上面的C文件中找一个函数，里面写入如下代码:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">int</span> <span class="string">*</span> <span class="string">p</span> <span class="string">=</span> <span class="literal">NULL</span><span class="string">;</span></span><br><span class="line"><span class="meta">*p</span> <span class="string">=</span> <span class="number">100</span><span class="string">;</span></span><br></pre></td></tr></table></figure>
+<p>上面是一个空指针异常，我们运行程序，发现崩溃了，然后查看控制台，只有下面一行信息:</p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">libc</span>: Fatal <span class="keyword">signal</span><span class="string"> 11 </span>(SIGSEGV), code <span class="number">1</span>, fault addr <span class="number">0x0</span> <span class="keyword">in</span> tid <span class="number">17481</span></span><br></pre></td></tr></table></figure>
+<p>完全看不懂上面的信息好吧，这个也太不明显了，下面我们就学习一下如何将上面的信息变得清楚明了</p>
+<p>我们需要用到是<code>ndk-stack</code>工具，它在我们的ndk根目录下，它可以帮助我们把上面的信息转化为更为易懂更详细的报错信息，下面看看怎么做：</p>
+<p>(1) 打开AndroidStudio中的命令行,输入<code>adb logcat &gt; log.txt</code></p>
+<p>上面这句我们是使用adb命令捕获log日志并写入log.txt文件,然后我们就可以在项目根目录下看到log.txt文件</p>
+<p>(2) 将log.txt打开看到报错信息，如下：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">F/libc    (<span class="number">17481</span>): Fatal signal <span class="number">11</span> (SIGSEGV), <span class="built_in">code</span> <span class="number">1</span>, fault addr <span class="number">0x0</span> in tid <span class="number">17481</span> (dekong.ndkdemo1)</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): Build fingerprint: 'generic/vbox86p/vbox86p:<span class="number">5.0</span>/LRX21M/genymotion08251046:userdebug/test-keys'</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): Revision: '<span class="number">0</span>'</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): ABI: 'x86'</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): pid: <span class="number">17481</span>, tid: <span class="number">17481</span>, name: dekong.ndkdemo1  &gt;&gt;&gt; com.codekong.ndkdemo1 &lt;&lt;&lt;</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): signal <span class="number">11</span> (SIGSEGV), <span class="built_in">code</span> <span class="number">1</span> (SEGV_MAPERR), fault addr <span class="number">0x0</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     eax <span class="number">00000000</span>  ebx f3494fcc  ecx ffa881a0  edx <span class="number">00000000</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     esi f434e2b0  edi <span class="number">00000000</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     xcs <span class="number">00000023</span>  xds <span class="number">0000002</span>b  xes <span class="number">0000002</span>b  xfs <span class="number">00000007</span>  xss <span class="number">0000002</span>b</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     eip f3492a06  ebp ffa88318  esp ffa88280  flags <span class="number">00210246</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): backtrace:</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     <span class="meta">#00 pc 00000a06  /data/app/com.codekong.ndkdemo1-2/lib/x86/libHelloNDK.so (Java_com_codekong_ndkdemo1_MainActivity_updateFile+150)</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     <span class="meta">#01 pc 0026e27b  /data/dalvik-cache/x86/data@app@com.codekong.ndkdemo1-2@base.apk@classes.dex</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     <span class="meta">#02 pc 9770ee7d  &lt;unknown&gt;</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):     <span class="meta">#03 pc a4016838  &lt;unknown&gt;</span></span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>):</span><br><span class="line"></span><br><span class="line">I/<span class="keyword">DEBUG</span>   (   <span class="number">67</span>): Tombstone written to: /data/tombstones/tombstone_05</span><br></pre></td></tr></table></figure>
+<p>现在的报错信息还是看不懂，所以我们需要使用<code>ndk-stack</code>转化一下:</p>
+<p>(3) 继续在AndroidStudio中的命令行中输入如下命令(在这之前，我们必须要将ndk-stack的路径添加到环境变量，以便于我们在命令行中直接使用它)</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ndk-stack -sym app<span class="regexp">/build/i</span>ntermediates<span class="regexp">/cmake/</span>debug<span class="regexp">/obj/</span>x86 -<span class="keyword">dump</span> .<span class="regexp">/log.txt</span></span><br></pre></td></tr></table></figure>
+<p>上面的<code>-sym</code>后面的参数为你的对应平台(我是Genymotion模拟器，x86平台)的路径，如果你按照上面的步骤改了路径，那就需要写改过的路径，<code>-dump</code>后面的参数就是我们上一步得出的log.txt文件，执行结果如下:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">********** Crash <span class="string">dump:</span> **********</span><br><span class="line">Build <span class="string">fingerprint:</span> <span class="string">'generic/vbox86p/vbox86p:5.0/LRX21M/genymotion08251046:userdebug/test-keys'</span></span><br><span class="line"><span class="string">pid:</span> <span class="number">17481</span>, <span class="string">tid:</span> <span class="number">17481</span>, <span class="string">name:</span> dekong.ndkdemo1  &gt;&gt;&gt; com.codekong.ndkdemo1 &lt;&lt;&lt;</span><br><span class="line">signal <span class="number">11</span> (SIGSEGV), code <span class="number">1</span> (SEGV_MAPERR), fault addr <span class="number">0x0</span></span><br><span class="line">Stack frame I<span class="regexp">/DEBUG   (   67):     #00 pc 00000a06  /</span>data<span class="regexp">/app/</span>com.codekong.ndkdemo1<span class="number">-2</span><span class="regexp">/lib/</span>x86/libHelloNDK.so (Java_com_codekon</span><br><span class="line">g_ndkdemo1_MainActivity_updateFile+<span class="number">150</span>): Routine Java_com_codekong_ndkdemo1_MainActivity_updateFile at <span class="string">F:</span>\AndroidFirstCode\NDK</span><br><span class="line">Demo1\app\src\main\cpp/HelloJNI.<span class="string">c:</span><span class="number">32</span></span><br><span class="line">Stack frame I<span class="regexp">/DEBUG   (   67):     #01 pc 0026e27b  /</span>data<span class="regexp">/dalvik-cache/</span>x86/data<span class="meta">@app</span><span class="meta">@com</span>.codekong.ndkdemo1<span class="number">-2</span><span class="meta">@base</span>.apk<span class="meta">@classes</span>.d</span><br><span class="line">ex</span><br><span class="line">Stack frame I<span class="regexp">/DEBUG   (   67):     #02 pc 9770ee7d  &lt;unknown&gt;: Unable to open symbol file app/</span>build<span class="regexp">/intermediates/</span>cmake<span class="regexp">/debug/</span></span><br><span class="line">obj<span class="regexp">/x86/</span>&lt;unknown&gt;. Error (<span class="number">22</span>): Invalid argument</span><br><span class="line">Stack frame I<span class="regexp">/DEBUG   (   67):     #03 pc a4016838  &lt;unknown&gt;: Unable to open symbol file app/</span>build<span class="regexp">/intermediates/</span>cmake<span class="regexp">/debug/</span></span><br><span class="line">obj<span class="regexp">/x86/</span>&lt;unknown&gt;. Error (<span class="number">22</span>): Invalid argument</span><br><span class="line">Crash dump is completed</span><br></pre></td></tr></table></figure>
+<p>尤其是上面的一句:</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g_ndkdemo1_MainActivity_updateFile+150): Routine Java_com_codekong_ndkdemo1_MainActivity_updateFile at F:<span class="symbol">\A</span>ndroidFirstCode<span class="symbol">\N</span>DK</span><br><span class="line">Demo1<span class="symbol">\a</span>pp<span class="symbol">\s</span>rc<span class="symbol">\m</span>ain<span class="symbol">\c</span>pp/HelloJNI.c:32</span><br></pre></td></tr></table></figure>
+<p>准确指出了发生错误的行数，便于我们定位错误。</p>
+<p>好了，上面就是简单介绍的调试技巧。</p>
+<h4 id="七、后记"><a href="#七、后记" class="headerlink" title="七、后记"></a>七、后记</h4><p>终于，写完了，这一次的内容有点多，但都是一些简单的入门的知识，我也是刚接触不久，希望通过总结加深理解，写出来帮助有需要的人，真心希望可以帮助到他人，大神勿喷，错误之处，多多指点。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NDK/" rel="tag"># NDK</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/07/链表实现两个多项式的加法/" rel="next" title="链表实现两个多项式的加法">
+                <i class="fa fa-chevron-left"></i> 链表实现两个多项式的加法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/11/Android常见基类封装/" rel="prev" title="Android常见基类封装">
+                Android常见基类封装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="冰鉴IT" />
+            
+              <p class="site-author-name" itemprop="name">冰鉴IT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/bingjianit" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-edit"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/d45a57e50ce5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/codekongs" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:szh@codekong.cn" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、相关概念介绍"><span class="nav-number">1.</span> <span class="nav-text">一、相关概念介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、配置NDK开发环境"><span class="nav-number">2.</span> <span class="nav-text">二、配置NDK开发环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、创建第一个NDK程序"><span class="nav-number">3.</span> <span class="nav-text">三、创建第一个NDK程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、NDK开发中常用的函数"><span class="nav-number">4.</span> <span class="nav-text">四、NDK开发中常用的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#五、NDK自定义配置"><span class="nav-number">5.</span> <span class="nav-text">五、NDK自定义配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#六、NDK错误调试"><span class="nav-number">6.</span> <span class="nav-text">六、NDK错误调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#七、后记"><span class="nav-number">7.</span> <span class="nav-text">七、后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冰鉴IT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

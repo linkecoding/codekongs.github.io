@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OkHttp," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="代码控" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="今天学习了一下OkHttp,在这里做个总结,希望可以帮助到有需要的人,好了,废话不多说,进入正题。">
+<meta name="keywords" content="OkHttp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OkHttp使用详解">
+<meta property="og:url" content="http://www.codekong.cn/2016/12/18/OkHttp使用详解/index.html">
+<meta property="og:site_name" content="代码控">
+<meta property="og:description" content="今天学习了一下OkHttp,在这里做个总结,希望可以帮助到有需要的人,好了,废话不多说,进入正题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-11T14:18:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OkHttp使用详解">
+<meta name="twitter:description" content="今天学习了一下OkHttp,在这里做个总结,希望可以帮助到有需要的人,好了,废话不多说,进入正题。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.codekong.cn/2016/12/18/OkHttp使用详解/"/>
+
+
+
+
+
+  <title>OkHttp使用详解 | 代码控</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d828b53b3d89a2a12af4b9db0030499f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">代码控</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夫唯不争,故莫能与之争</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2016/12/18/OkHttp使用详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OkHttp使用详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-18T19:02:21+08:00">
+                2016-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  今天学习了一下OkHttp,在这里做个总结,希望可以帮助到有需要的人,好了,废话不多说,进入正题。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>今天学习了一下<code>OkHttp</code>,在这里做个总结,希望可以帮助到有需要的人,好了,废话不多说,进入正题。</p>
+</blockquote>
+<h3 id="一、OkHttp介绍"><a href="#一、OkHttp介绍" class="headerlink" title="一、OkHttp介绍"></a>一、OkHttp介绍</h3><blockquote>
+<p>OkHttp是一个优秀的网络请求框架,可能一说到网络请求框架,可能很多人都会想到<code>volley</code>,<code>volley</code>是一个Google提供的网络请求框架,我的博客里也有一篇专门介绍<code>volley</code>的博客,博客地址在此<strong><a href="http://blog.csdn.net/bingjianit/article/details/52387916" target="_blank" rel="noopener">Android网络请求 —— Volley的使用</a></strong> 那么既然Google提供了网络请求的框架,我们为什么还要使用<code>OkHttp</code>呢,原来是<code>volley</code>是要依靠<code>HttpCient</code>的,而Google在<code>Android6.0</code>的SDK中去掉了<code>HttpCient</code>,所以<code>OkHttp</code>就开始越来越受大家的欢迎.</p>
+</blockquote>
+<blockquote>
+<p>今天我们主要介绍<code>OkHttp</code>的<code>Get</code>请求、<code>Post</code>请求、<code>上传下载文件</code>、 <code>上传下载图片等功能</code>。</p>
+</blockquote>
+<p><strong>当然在开始之前,我们还要先在项目中添加<code>OkHttp</code>的依赖库,至于怎么在AndroidStudio中给项目添加OkHTTP依赖,这里将不再赘述。另外,OkHttp中使用了建造者模式,如果对建造者模式不了解,可以看看这篇博客<em><a href="http://blog.csdn.net/bingjianit/article/details/53607856" target="_blank" rel="noopener">设计模式之建造者模式</a></em></strong></p>
+<p><code>添加OkHttp的依赖</code><br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在对应的Module的gradle中添加</span><br><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.okhttp3:okhttp:3.5.0'</span>   </span><br><span class="line">然后同步一下项目即可</span><br></pre></td></tr></table></figure></p>
+<h3 id="二、OkHttp进行Get请求"><a href="#二、OkHttp进行Get请求" class="headerlink" title="二、OkHttp进行Get请求"></a>二、OkHttp进行Get请求</h3><blockquote>
+<p>使用OkHttp进行<code>Get</code>请求只需要四步即可完成。</p>
+</blockquote>
+<p>1 . 拿到OkHttpClient对象<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient<span class="built_in"> client </span>= new OkHttpClient();</span><br></pre></td></tr></table></figure></p>
+<p>2 . 构造Request对象<br><figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Request</span> <span class="built_in">request</span> = <span class="keyword">new</span> <span class="built_in">Request</span>.Builder()</span><br><span class="line">                .<span class="keyword">get</span>()</span><br><span class="line">                .url(<span class="string">"https:www.baidu.com"</span>)</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这里我们采用建造者模式和链式调用指明是进行Get请求,并传入Get请求的地址</p>
+</blockquote>
+<p><strong>如果我们需要在get请求时传递参数,我们可以以下面的方式将参数拼接在url之后</strong><br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">https:</span>www.baidu.com?username=admin<span class="variable">&amp;password</span>=admin</span><br></pre></td></tr></table></figure></p>
+<p>3 . 将Request封装为Call<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Call</span> <span class="keyword">call</span> = client.newCall(request);</span><br></pre></td></tr></table></figure></p>
+<p>4 . 根据需要调用同步或者异步请求方法<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//同步调用,返回Response,会抛出IO异常</span></span><br><span class="line">Response response = call.execute();</span><br><span class="line"></span><br><span class="line"><span class="comment">//异步调用,并设置回调函数</span></span><br><span class="line">call.enqueue(<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call call, IOException e)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(OkHttpActivity.<span class="keyword">this</span>, <span class="string">"get failed"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call call, <span class="keyword">final</span> Response response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> String res = response.body().string();</span><br><span class="line">        runOnUiThread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                contentTv.setText(res);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>第四步有一些需要注意的地方</p>
+<ol>
+<li>同步调用会阻塞主线程,一般不适用</li>
+<li>异步调用的回调函数是在子线程,我们不能在子线程更新UI,需要借助于<code>runOnUiThread()</code>方法或者<code>Handler</code>来处理</li>
+</ol>
+</blockquote>
+<p>是不是以为上面就结束了,对的,OkHttp的Get请求步骤就这么4步,但是当你试图打开应用加载数据,可是发现并没有加载到数据,这是一个简单但是我们常犯的错误.<br><strong>在AndroidManifest.xml中加入联网权限</strong><br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:<span class="built_in">name</span>=<span class="string">"android.permission.INTERNET"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="三、OkHttp进行Post请求提交键值对"><a href="#三、OkHttp进行Post请求提交键值对" class="headerlink" title="三、OkHttp进行Post请求提交键值对"></a>三、OkHttp进行Post请求提交键值对</h3><blockquote>
+<p>使用OkHttp进行<code>Post</code>请求和进行<code>Get</code>请求很类似,只需要五步即可完成。</p>
+</blockquote>
+<p>1 . 拿到OkHttpClient对象<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient<span class="built_in"> client </span>= new OkHttpClient();</span><br></pre></td></tr></table></figure></p>
+<p>2 . 构建FormBody,传入参数<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FormBody formBody = new FormBody.Builder()</span><br><span class="line">                .<span class="builtin-name">add</span>(<span class="string">"username"</span>, <span class="string">"admin"</span>)</span><br><span class="line">                .<span class="builtin-name">add</span>(<span class="string">"password"</span>, <span class="string">"admin"</span>)</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure></p>
+<p>3 . 构建Request,将FormBody作为Post方法的参数传入<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">final <span class="type">Request</span> request = <span class="function"><span class="keyword">new</span> <span class="title">Request</span>.<span class="title">Builder</span>()</span></span><br><span class="line"><span class="function">                .<span class="title">url</span>("http://www.jianshu.com/")</span></span><br><span class="line"><span class="function">                .<span class="title">post</span>(formBody)</span></span><br><span class="line"><span class="function">                .<span class="title">build</span>();</span></span><br></pre></td></tr></table></figure></p>
+<p>4 . 将Request封装为Call<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Call</span> <span class="keyword">call</span> = client.newCall(request);</span><br></pre></td></tr></table></figure></p>
+<p>5 . 调用请求,重写回调方法<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">call.enqueue(<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call call, IOException e)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(OkHttpActivity.<span class="keyword">this</span>, <span class="string">"Post Failed"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call call, Response response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> String res = response.body().string();</span><br><span class="line">        runOnUiThread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                contentTv.setText(res);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>经过上面的步骤一个post请求就完成了,当然上面的<code>url</code>参数和需要传入的参数大家就要根据实际情况来传入,你会发现get和post请求的步骤非常像。</p>
+</blockquote>
+<h3 id="四、OkHttp进行Post请求提交字符串"><a href="#四、OkHttp进行Post请求提交字符串" class="headerlink" title="四、OkHttp进行Post请求提交字符串"></a>四、OkHttp进行Post请求提交字符串</h3><p>如果你已经掌握了上面的两种基本的步骤,那下面的内容就比较简单了</p>
+<blockquote>
+<p>上面我们的post的参数是通过构造一个<code>FormBody</code>通过键值对的方式来添加进去的,其实post方法需要传入的是一个<code>RequestBody</code>对象,<code>FormBody</code>是<code>RequestBody</code>的子类,但有时候我们常常会遇到要传入一个字符串的需求,比如客户端给服务器发送一个json字符串,那这种时候就需要用到另一种方式来构造一个<code>RequestBody</code>如下所示:</p>
+</blockquote>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">RequestBody requestBody</span> = RequestBody.create(MediaType.parse(<span class="string">"text/plain;charset=utf-8"</span>), <span class="string">"&#123;username:admin;password:admin&#125;"</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的MediaType我们指定传输的是纯文本,而且编码方式是utf-8,通过上面的方式我们就可以向服务端发送json字符串啦。</p>
+</blockquote>
+<p><strong>注:关于MidiaType的类型你可以百度搜索<code>mime type</code>查看相关的内容,这里不再赘述</strong></p>
+<h3 id="五、OkHttp进行Post请求上传文件"><a href="#五、OkHttp进行Post请求上传文件" class="headerlink" title="五、OkHttp进行Post请求上传文件"></a>五、OkHttp进行Post请求上传文件</h3><p>理解了上面一个,下面这个就更简单了,这里我们以上传一张图片为例,当然你也可以上传一个txt什么的文件,都是可以的</p>
+<blockquote>
+<p>其实最主要的还是构架我们自己的<code>RequestBody</code>,如下图构建</p>
+</blockquote>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">File</span> <span class="keyword">file</span> = <span class="keyword">new</span> <span class="keyword">File</span>(Environment.getExternalStorageDirectory(), <span class="string">"1.png"</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">file</span>.exists())&#123;</span><br><span class="line">    Toast.makeText(<span class="keyword">this</span>, <span class="string">"文件不存在"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    RequestBody requestBody2 = RequestBody.create(MediaType.parse(<span class="string">"application/octet-stream"</span>), <span class="keyword">file</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里我们将手机SD卡根目录下的<code>1.png</code>图片进行上传。代码中的<code>application/octet-stream</code>表示我们的文件是<code>任意二进制数据流</code>,当然你也可以换成更具体的<code>image/png</code></p>
+</blockquote>
+<p><strong>注:最后记得最重要的一点:添加存储卡写权限,在<code>AndroidManifest.xml</code>文件中添加如下代码:</strong><br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:<span class="attribute">name</span>=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="六、OkHttp进行Post请求提交表单"><a href="#六、OkHttp进行Post请求提交表单" class="headerlink" title="六、OkHttp进行Post请求提交表单"></a>六、OkHttp进行Post请求提交表单</h3><blockquote>
+<p>我们在网页上经常会遇到用户注册的情况,需要你输入用户名,密码,还有上传头像,这其实就是一个表单,那么接下来我们看看如何利用OkHttp来进行表单提交。经过上面的学习,大家肯定也懂,主要的区别就在于构造不同的<code>RequestBody</code>传递给<code>post</code>方法即可.</p>
+</blockquote>
+<p><strong>由于我们使用的是OkHttp3所以我们还需要再导入一个包<code>okio.jar</code>才能继续下面的内容,我们需要在模块的Gradle文件中添加如下代码,然后同步一下项目即可</strong></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.okio:okio:1.11.0'</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里我们会用到一个<code>MuiltipartBody</code>,这是<code>RequestBody</code>的一个子类,我们提交表单就是利用这个类来构建一个<code>RequestBody</code>,下面的代码我们会发送一个包含用户民、密码、头像的表单到服务端</p>
+</blockquote>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">File</span> <span class="keyword">file</span> = <span class="keyword">new</span> <span class="keyword">File</span>(Environment.getExternalStorageDirectory(), <span class="string">"1.png"</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">file</span>.exists())&#123;</span><br><span class="line">    Toast.makeText(<span class="keyword">this</span>, <span class="string">"文件不存在"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">RequestBody muiltipartBody = <span class="keyword">new</span> MultipartBody.Builder()</span><br><span class="line">        <span class="comment">//一定要设置这句</span></span><br><span class="line">        .setType(MultipartBody.FORM)</span><br><span class="line">        .addFormDataPart(<span class="string">"username"</span>, <span class="string">"admin"</span>)<span class="comment">//</span></span><br><span class="line">        .addFormDataPart(<span class="string">"password"</span>, <span class="string">"admin"</span>)<span class="comment">//</span></span><br><span class="line">        .addFormDataPart(<span class="string">"myfile"</span>, <span class="string">"1.png"</span>, RequestBody.create(MediaType.parse(<span class="string">"application/octet-stream"</span>), <span class="keyword">file</span>))</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面添加用户民和密码的部分和我们上面学习的提交键值对的方法很像,我们关键要注意以下几点:</p>
+</blockquote>
+<p>(1)如果提交的是表单,一定要设置<code>setType(MultipartBody.FORM)</code>这一句</p>
+<p>(2)提交的文件<code>addFormDataPart()</code>的第一个参数,就上面代码中的<code>myfile</code>就是类似于键值对的键,是供服务端使用的,就类似于网页表单里面的<code>name</code>属性,例如下面:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input <span class="attribute">type</span>=<span class="string">"file"</span> <span class="attribute">name</span>=<span class="string">"myfile"</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>(3)提交的文件<code>addFormDataPart()</code>的第二个参数文件的本地的名字,第三个参数是<code>RequestBody</code>,里面包含了我们要上传的文件的路径以及<code>MidiaType</code></p>
+<p>(4)记得在<code>AndroidManifest.xml</code>文件中添加存储卡读写权限</p>
+<h3 id="七、OkHttp进行get请求下载文件"><a href="#七、OkHttp进行get请求下载文件" class="headerlink" title="七、OkHttp进行get请求下载文件"></a>七、OkHttp进行get请求下载文件</h3><blockquote>
+<p>除了上面的功能,我们最常用的功能该有从网路上下载文件,我们下面的例子将演示下载一个文件存放在存储卡根目录,从网络下载一张图片并显示到ImageView中</p>
+</blockquote>
+<p>1 . 从网络下载一个文件(此处我们以下载一张图片为例)<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> downloadImg(View view)&#123;</span><br><span class="line">    OkHttpClient client = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line">    <span class="keyword">final</span> Request request = <span class="keyword">new</span> Request.Builder()</span><br><span class="line">            .get()</span><br><span class="line">            .url(<span class="string">"https://www.baidu.com/img/bd_logo1.png"</span>)</span><br><span class="line">            .build();</span><br><span class="line">    <span class="keyword">Call</span> <span class="keyword">call</span> = client.newCall(request);</span><br><span class="line">    <span class="keyword">call</span>.enqueue(<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> onFailure(<span class="keyword">Call</span> <span class="keyword">call</span>, IOException e) &#123;</span><br><span class="line">            Log.e(<span class="string">"moer"</span>, <span class="string">"onFailure: "</span>);;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> onResponse(<span class="keyword">Call</span> <span class="keyword">call</span>, Response response) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">            <span class="comment">//拿到字节流</span></span><br><span class="line">            InputStream is = response.body().byteStream();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">File</span> <span class="keyword">file</span>  = <span class="keyword">new</span> <span class="keyword">File</span>(Environment.getExternalStorageDirectory(), <span class="string">"n.png"</span>);</span><br><span class="line">            FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="keyword">file</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">128</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> ((len = is.<span class="keyword">read</span>(buf)) != -<span class="number">1</span>)&#123;</span><br><span class="line">                fos.<span class="keyword">write</span>(buf, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fos.flush();</span><br><span class="line">            <span class="comment">//关闭流</span></span><br><span class="line">            fos.close();</span><br><span class="line">            is.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>你会发现步骤与进行一般的<code>Get</code>请求差别不大,唯一的区别在于我们在回调函数中所做的事,我们拿到了图片的字节流,然后保存为了本地的一张图片</p>
+</blockquote>
+<p>2 . 从网络下载一张图片并设置到ImageView中</p>
+<blockquote>
+<p>其实学会了上面的步骤你完全可以将图片下载到本地后再设置到ImageView中,当然下面是另一种方法<br>这里我们使用<code>BitmapFactory</code>的<code>decodeStream</code>将图片的输入流直接转换为<code>Bitmap</code>,然后设置到<code>ImageView</code>中,下面只给出<code>onResponse()</code>中的代码.</p>
+</blockquote>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> onResponse(Call call, Response response) throws IOException &#123;</span><br><span class="line">    InputStream <span class="keyword">is</span> = response.<span class="keyword">body</span>().byteStream();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> Bitmap bitmap = BitmapFactory.decodeStream(<span class="keyword">is</span>);</span><br><span class="line">    runOnUiThread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">            imageView.setImageBitmap(bitmap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">is</span>.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="八、给文件的上传和下载加上进度条"><a href="#八、给文件的上传和下载加上进度条" class="headerlink" title="八、给文件的上传和下载加上进度条"></a>八、给文件的上传和下载加上进度条</h3><blockquote>
+<p>我们一直都说,用户体验很重要,当我们下载的文件比较大,而网速又比较慢的时候,如果我们只是在后台下载或上传,没有给用户显示一个进度,那将是非常差的用户体验,下面我们就将简单做一下进度的显示,其实非常简单的</p>
+</blockquote>
+<p>1 . 显示文件下载进度</p>
+<blockquote>
+<p>这里只是演示,我只是把进度显示在一个TextView中,至于进度的获取当然是在我们的回调函数<code>onResponse()</code>中去获取</p>
+</blockquote>
+<p>(1)使用<code>response.body().contentLength()</code>拿到文件总大小</p>
+<p>(2)在<code>while</code>循环中每次递增我们读取的buf的长度</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> onResponse(<span class="keyword">Call</span> <span class="keyword">call</span>, Response response) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    InputStream is = response.body().byteStream();</span><br><span class="line">    <span class="keyword">long</span> sum = <span class="number">0</span>L;</span><br><span class="line">    <span class="comment">//文件总大小</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">long</span> total = response.body().contentLength();</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">File</span> <span class="keyword">file</span>  = <span class="keyword">new</span> <span class="keyword">File</span>(Environment.getExternalStorageDirectory(), <span class="string">"n.png"</span>);</span><br><span class="line">    FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="keyword">file</span>);</span><br><span class="line">    <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">128</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((len = is.<span class="keyword">read</span>(buf)) != -<span class="number">1</span>)&#123;</span><br><span class="line">        fos.<span class="keyword">write</span>(buf, <span class="number">0</span>, len);</span><br><span class="line">        <span class="comment">//每次递增</span></span><br><span class="line">        sum += len;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">long</span> finalSum = sum;</span><br><span class="line">        Log.d(<span class="string">"pyh1"</span>, <span class="string">"onResponse: "</span> + finalSum + <span class="string">"/"</span> + total);</span><br><span class="line">        runOnUiThread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">                <span class="comment">//将进度设置到TextView中</span></span><br><span class="line">                contentTv.setText(finalSum + <span class="string">"/"</span> + total);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    fos.flush();</span><br><span class="line">    fos.close();</span><br><span class="line">    is.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2 . 显示文件上传进度</p>
+<blockquote>
+<p>对于上传的进度的处理会比较麻烦,因为具体的上传过程是在<code>RequestBody</code>中由<code>OkHttp</code>帮我们处理上传,而且<code>OkHttp</code>并没有给我们提供上传进度的接口,这里我们的做法是自定义类继承<code>RequestBody</code>,然后重写其中的方法,将其中的上传进度通过接口回调暴露出来供我们使用。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountingRequestBody</span> <span class="keyword">extends</span> <span class="title">RequestBody</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实际起作用的RequestBody</span></span><br><span class="line">    <span class="keyword">private</span> RequestBody delegate;</span><br><span class="line">    <span class="comment">//回调监听</span></span><br><span class="line">    <span class="keyword">private</span> Listener listener;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CountingSink countingSink;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构造函数初始化成员变量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> delegate</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> listener</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CountingRequestBody</span><span class="params">(RequestBody delegate, Listener listener)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.delegate = delegate;</span><br><span class="line">        <span class="keyword">this</span>.listener = listener;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MediaType <span class="title">contentType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> delegate.contentType();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeTo</span><span class="params">(BufferedSink sink)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        countingSink = <span class="keyword">new</span> CountingSink(sink);</span><br><span class="line">        <span class="comment">//将CountingSink转化为BufferedSink供writeTo()使用</span></span><br><span class="line">        BufferedSink bufferedSink = Okio.buffer(countingSink);</span><br><span class="line">        delegate.writeTo(bufferedSink);</span><br><span class="line">        bufferedSink.flush();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">CountingSink</span> <span class="keyword">extends</span> <span class="title">ForwardingSink</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">long</span> byteWritten;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">CountingSink</span><span class="params">(Sink delegate)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(delegate);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 上传时调用该方法,在其中调用回调函数将上传进度暴露出去,该方法提供了缓冲区的自己大小</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> source</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> byteCount</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(Buffer source, <span class="keyword">long</span> byteCount)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.write(source, byteCount);</span><br><span class="line">            byteWritten += byteCount;</span><br><span class="line">            listener.onRequestProgress(byteWritten, contentLength());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回文件总的字节大小</span></span><br><span class="line"><span class="comment">     * 如果文件大小获取失败则返回-1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">contentLength</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> delegate.contentLength();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 回调监听接口</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">interface</span> <span class="title">Listener</span></span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 暴露出上传进度</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> byteWritted  已经上传的字节大小</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> contentLength 文件的总字节大小</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onRequestProgress</span><span class="params">(<span class="keyword">long</span> byteWritted, <span class="keyword">long</span> contentLength)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的代码注释非常详细,这里不再解释,然后我们在写具体的请求时还需要做如下变化</p>
+</blockquote>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">File</span> <span class="keyword">file</span> = <span class="keyword">new</span> <span class="keyword">File</span>(Environment.getExternalStorageDirectory(), <span class="string">"1.png"</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">file</span>.exists())&#123;</span><br><span class="line">    Toast.makeText(<span class="keyword">this</span>, <span class="string">"文件不存在"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    RequestBody requestBody2 = RequestBody.create(MediaType.parse(<span class="string">"application/octet-stream"</span>), <span class="keyword">file</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用我们自己封装的类</span></span><br><span class="line">CountingRequestBody countingRequestBody = <span class="keyword">new</span> CountingRequestBody(requestBody2, <span class="keyword">new</span> CountingRequestBody.Listener() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> onRequestProgress(<span class="keyword">long</span> byteWritted, <span class="keyword">long</span> contentLength) &#123;</span><br><span class="line">        <span class="comment">//打印进度</span></span><br><span class="line">        Log.d(<span class="string">"pyh"</span>, <span class="string">"进度 ："</span> + byteWritted + <span class="string">"/"</span> + contentLength);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面其实就是在原有的<code>RequestBody</code>上包装了一层,最后在我们的使用中在<code>post()</code>方法中传入我们的<code>CountingRequestBody</code>对象即可。</p>
+</blockquote>
+<h3 id="九、后记"><a href="#九、后记" class="headerlink" title="九、后记"></a>九、后记</h3><blockquote>
+<p>以上就是一些<code>OkHttp</code>常用的总结,希望可以帮助到需要的人</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OkHttp/" rel="tag"># OkHttp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/12/设计模式之建造者模式/" rel="next" title="设计模式之建造者模式">
+                <i class="fa fa-chevron-left"></i> 设计模式之建造者模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/19/Android6-0新应用权限管理机制详解/" rel="prev" title="Android6.0新应用权限管理机制详解">
+                Android6.0新应用权限管理机制详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="冰鉴IT" />
+            
+              <p class="site-author-name" itemprop="name">冰鉴IT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/bingjianit" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-edit"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/d45a57e50ce5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/codekongs" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:szh@codekong.cn" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、OkHttp介绍"><span class="nav-number">1.</span> <span class="nav-text">一、OkHttp介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、OkHttp进行Get请求"><span class="nav-number">2.</span> <span class="nav-text">二、OkHttp进行Get请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、OkHttp进行Post请求提交键值对"><span class="nav-number">3.</span> <span class="nav-text">三、OkHttp进行Post请求提交键值对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、OkHttp进行Post请求提交字符串"><span class="nav-number">4.</span> <span class="nav-text">四、OkHttp进行Post请求提交字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、OkHttp进行Post请求上传文件"><span class="nav-number">5.</span> <span class="nav-text">五、OkHttp进行Post请求上传文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、OkHttp进行Post请求提交表单"><span class="nav-number">6.</span> <span class="nav-text">六、OkHttp进行Post请求提交表单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、OkHttp进行get请求下载文件"><span class="nav-number">7.</span> <span class="nav-text">七、OkHttp进行get请求下载文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#八、给文件的上传和下载加上进度条"><span class="nav-number">8.</span> <span class="nav-text">八、给文件的上传和下载加上进度条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#九、后记"><span class="nav-number">9.</span> <span class="nav-text">九、后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冰鉴IT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

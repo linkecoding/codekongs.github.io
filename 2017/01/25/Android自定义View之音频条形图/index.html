@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,自定义View," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="代码控" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="最近在学习Android自定义View，看到一个自定义音频条形图的例子，遂学习了一下并且在此基础上扩展了一点，在此记录一下，来帮助到需要的人。">
+<meta name="keywords" content="Android,自定义View">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android自定义View之音频条形图">
+<meta property="og:url" content="http://www.codekong.cn/2017/01/25/Android自定义View之音频条形图/index.html">
+<meta property="og:site_name" content="代码控">
+<meta property="og:description" content="最近在学习Android自定义View，看到一个自定义音频条形图的例子，遂学习了一下并且在此基础上扩展了一点，在此记录一下，来帮助到需要的人。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170125133204527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-11T14:18:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android自定义View之音频条形图">
+<meta name="twitter:description" content="最近在学习Android自定义View，看到一个自定义音频条形图的例子，遂学习了一下并且在此基础上扩展了一点，在此记录一下，来帮助到需要的人。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170125133204527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.codekong.cn/2017/01/25/Android自定义View之音频条形图/"/>
+
+
+
+
+
+  <title>Android自定义View之音频条形图 | 代码控</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d828b53b3d89a2a12af4b9db0030499f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">代码控</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夫唯不争,故莫能与之争</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2017/01/25/Android自定义View之音频条形图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android自定义View之音频条形图</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T11:50:25+08:00">
+                2017-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  最近在学习Android自定义View，看到一个自定义音频条形图的例子，遂学习了一下并且在此基础上扩展了一点，在此记录一下，来帮助到需要的人。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近在学习Android自定义View，看到一个自定义音频条形图的例子，遂学习了一下并且在此基础上扩展了一点，在此记录一下，来帮助到需要的人。先放上一张效果图，看着还不错吧，接下来就开始一步步实现这个小例子。</p>
+</blockquote>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="http://img.blog.csdn.net/20170125133204527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></h2><blockquote>
+<p>先说说这个自定义View的基本思路，首先最主要其实就是绘制一个个小矩形，这里主要是涉及到绘制时的坐标计算，然后为了让其动起来，我们使用随机数来作为每个小矩形的高度，同时为了效果更逼真，我们还可以在每次View进行重绘时加一个延时，还可以利用<code>LinearGradient</code>来让不同的小矩形有一个颜色渐变，最后为了定制性更好，还可以增加自定义属性，大致思路就是这样，让我们一步步实现吧。</p>
+</blockquote>
+<h3 id="一、定义类继承自View并修改构造方法"><a href="#一、定义类继承自View并修改构造方法" class="headerlink" title="一、定义类继承自View并修改构造方法"></a>一、定义类继承自View并修改构造方法</h3><blockquote>
+<p>我们必须创建一个类，来修改其中的构造方法之间的调用，让一个参数的构造方法中调用两个参数构造方法，在扫那个参数的构造方法中调用两个参数的构造方法，然后在第三个构造方法中写一些变量初始化的代码即可，这样，无论别人是通过代码，还是通过在xml文件中使用我们的自定义View还是使用了我们自定义View的自定义属性，这些代码都会被调用，要是大家还不太清楚三个构造方法在何时调用，可以看看下面的注释。</p>
+</blockquote>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代码中直接new时调用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AudioBarGraph</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在xml中使用自定义View并且没有自定义属性时调用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> attrs</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AudioBarGraph</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在xml中使用自定义View并且使用自定义属性时调用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> attrs</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> defStyleAttr</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AudioBarGraph</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二、在布局文件中引用自定义View"><a href="#二、在布局文件中引用自定义View" class="headerlink" title="二、在布局文件中引用自定义View"></a>二、在布局文件中引用自定义View</h3><blockquote>
+<p>注意这里的引用必须使用全路径</p>
+</blockquote>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;com<span class="selector-class">.codekong</span><span class="selector-class">.customview</span><span class="selector-class">.view</span><span class="selector-class">.AudioBarGraph</span></span><br><span class="line">    android:id=<span class="string">"@+id/id_abg"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"wrap_content"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="三、定义成员变量以备后面使用"><a href="#三、定义成员变量以备后面使用" class="headerlink" title="三、定义成员变量以备后面使用"></a>三、定义成员变量以备后面使用</h3><blockquote>
+<p>每个成员变量都有注释</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//小矩形的数目</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mRectCount;</span><br><span class="line"><span class="comment">//每个小矩形的宽度</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mRectWidth;</span><br><span class="line"><span class="comment">//每个小矩形的高度</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mRectHeight;</span><br><span class="line"><span class="comment">//每个小矩形之间的偏移量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">float</span> mOffset;</span><br><span class="line"><span class="comment">//绘制小矩形的画笔</span></span><br><span class="line"><span class="keyword">private</span> Paint mPaint;</span><br><span class="line"><span class="comment">//View的宽度</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mViewWidth;</span><br><span class="line"><span class="comment">//产生渐变效果</span></span><br><span class="line"><span class="keyword">private</span> LinearGradient mLinearGradient;</span><br><span class="line"><span class="comment">//每个小矩形的当前高度</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">float</span>[] mCurrentHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//渐变色顶部颜色</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mTopColor;</span><br><span class="line"><span class="comment">//渐变色底部颜色</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mBottomColor;</span><br><span class="line"><span class="comment">//View重绘延时时间</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mDelayTime;</span><br></pre></td></tr></table></figure>
+<h3 id="四、在xml文件中定义自定义属性"><a href="#四、在xml文件中定义自定义属性" class="headerlink" title="四、在xml文件中定义自定义属性"></a>四、在xml文件中定义自定义属性</h3><blockquote>
+<p>在<code>attrs.xml</code>文件中定义一些属性，一边后面使用时可以自由配置</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">declare-styleable</span> <span class="attr">name</span>=<span class="string">"AudioBarGraph"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"rectCount"</span> <span class="attr">format</span>=<span class="string">"integer"</span>/&gt;</span>         <span class="comment">&lt;!-- 小矩形的数目 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"rectOffset"</span> <span class="attr">format</span>=<span class="string">"float"</span>/&gt;</span>          <span class="comment">&lt;!-- 每一个小矩形之间的偏移量 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"topColor"</span> <span class="attr">format</span>=<span class="string">"color"</span>/&gt;</span>            <span class="comment">&lt;!-- 一个小矩形渐变的顶部颜色 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"bottomColor"</span> <span class="attr">format</span>=<span class="string">"color"</span>/&gt;</span>         <span class="comment">&lt;!-- 一个小矩形渐变的底部颜色 --&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"delayTime"</span> <span class="attr">format</span>=<span class="string">"integer"</span>/&gt;</span>         <span class="comment">&lt;!-- 小矩形变化的延时时间(毫秒) --&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">declare-styleable</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="五、获取自定义属性，并初始化变量"><a href="#五、获取自定义属性，并初始化变量" class="headerlink" title="五、获取自定义属性，并初始化变量"></a>五、获取自定义属性，并初始化变量</h3><blockquote>
+<p>我们在三个参数的构造方法中初始化画笔并且获取我们的自定义属性，由于TypedArray对象是共享的资源，所以在获取完值之后必须要调用<code>recycle()</code>方法来回收。</p>
+</blockquote>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">AudioBarGraph</span>(<span class="type">Context</span> context, <span class="type">AttributeSet</span> attrs, int defStyleAttr) &#123;</span><br><span class="line">    super(context, attrs, defStyleAttr);</span><br><span class="line">    <span class="comment">//初始化画笔设置抗锯齿</span></span><br><span class="line">    mPaint = <span class="function"><span class="keyword">new</span> <span class="title">Paint</span>();</span></span><br><span class="line"><span class="function">    <span class="title">mPaint</span>.<span class="title">setAntiAlias</span>(true);</span></span><br><span class="line"><span class="function">    <span class="title">mPaint</span>.<span class="title">setStyle</span>(<span class="type">Paint</span>.<span class="type">Style</span>.<span class="type">FILL</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="title">TypedArray</span> <span class="title">ta</span> = <span class="title">context</span>.<span class="title">obtainStyledAttributes</span>(attrs, <span class="type">R</span>.styleable.<span class="type">AudioBarGraph</span>);</span></span><br><span class="line"><span class="function">    <span class="title">mRectCount</span> = <span class="title">ta</span>.<span class="title">getInt</span>(<span class="type">R</span>.styleable.<span class="type">AudioBarGraph_rectCount</span>, <span class="number">10</span>);</span></span><br><span class="line"><span class="function">    <span class="title">mOffset</span> = <span class="title">ta</span>.<span class="title">getFloat</span>(<span class="type">R</span>.styleable.<span class="type">AudioBarGraph_rectOffset</span>, <span class="number">3</span>);</span></span><br><span class="line"><span class="function">    <span class="title">mDelayTime</span> = <span class="title">ta</span>.<span class="title">getInt</span>(<span class="type">R</span>.styleable.<span class="type">AudioBarGraph_delayTime</span>, <span class="number">300</span>);</span></span><br><span class="line"><span class="function">    <span class="title">mTopColor</span> = <span class="title">ta</span>.<span class="title">getColor</span>(<span class="type">R</span>.styleable.<span class="type">AudioBarGraph_topColor</span>, <span class="type">Color</span>.<span class="type">YELLOW</span>);</span></span><br><span class="line"><span class="function">    <span class="title">mBottomColor</span> = <span class="title">ta</span>.<span class="title">getColor</span>(<span class="type">R</span>.styleable.<span class="type">AudioBarGraph_bottomColor</span>, <span class="type">Color</span>.<span class="type">BLUE</span>);</span></span><br><span class="line"><span class="function">    <span class="title">ta</span>.<span class="title">recycle</span>();</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="六、重写onMeasure-方法"><a href="#六、重写onMeasure-方法" class="headerlink" title="六、重写onMeasure()方法"></a>六、重写<code>onMeasure()</code>方法</h3><blockquote>
+<p>此处重写<code>onMeasure()</code>方法是为了让其在<code>wrap_content</code>的情况下有一个默认的宽高</p>
+</blockquote>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> onMeasure(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec) &#123;</span><br><span class="line">    <span class="keyword">int</span> widthMode = MeasureSpec.getMode(widthMeasureSpec);</span><br><span class="line">    <span class="keyword">int</span> heightMode = MeasureSpec.getMode(heightMeasureSpec);</span><br><span class="line">    <span class="keyword">int</span> widthSize = MeasureSpec.getSize(widthMeasureSpec);</span><br><span class="line">    <span class="keyword">int</span> heightSize = MeasureSpec.getSize(heightMeasureSpec);</span><br><span class="line">    <span class="comment">//默认的宽高</span></span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">width</span> = <span class="number">200</span>;</span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">height</span> = <span class="number">200</span>;</span><br><span class="line"></span><br><span class="line">    setMeasuredDimension(widthMode == MeasureSpec.EXACTLY ? widthSize : <span class="built_in">width</span>,</span><br><span class="line">            heightMode == MeasureSpec.EXACTLY ? heightSize : <span class="built_in">height</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="七、重写onSizeChanged-方法"><a href="#七、重写onSizeChanged-方法" class="headerlink" title="七、重写onSizeChanged()方法"></a>七、重写<code>onSizeChanged()</code>方法</h3><blockquote>
+<p>在<code>onSizeChanged()</code>方法中我们获取到View的宽高及初始化一个<code>LinearGradient</code>,为后面的绘制做准备</p>
+</blockquote>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onSizeChanged</span><span class="params">(<span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> oldw, <span class="keyword">int</span> oldh)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onSizeChanged(w, h, oldw, oldh);</span><br><span class="line">    mViewWidth = getMeasuredWidth();</span><br><span class="line">    mRectHeight = getMeasuredHeight();</span><br><span class="line">    mRectWidth = (<span class="keyword">int</span>) (mViewWidth * <span class="number">0.6</span> / mRectCount);</span><br><span class="line">    mLinearGradient = <span class="keyword">new</span> LinearGradient(<span class="number">0</span>, <span class="number">0</span>, mRectWidth, mRectHeight,</span><br><span class="line">            mTopColor, mBottomColor, Shader.TileMode.CLAMP);</span><br><span class="line">    <span class="comment">//给画笔设置Shader</span></span><br><span class="line">    mPaint.setShader(mLinearGradient);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="八、重写onDraw-方法开始绘制View"><a href="#八、重写onDraw-方法开始绘制View" class="headerlink" title="八、重写onDraw()方法开始绘制View"></a>八、重写<code>onDraw()</code>方法开始绘制View</h3><blockquote>
+<p>前面准备了那么多，现在终于要开始绘制小矩形了，其实这里最主要的就是一个坐标的计算，对于每个小矩形的高度，我们后面会留有公开的方法可以让用户去设置，如果用户没有提供每个小矩形的高度，我们则将使用随机的高度。</p>
+</blockquote>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> onDraw(Canvas canvas) &#123;</span><br><span class="line">    <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">    <span class="keyword">if</span> (mCurrentHeight != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="comment">//使用者指定了每个小矩形当前的高度则使用</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; mRectCount; i++) &#123;</span><br><span class="line">            <span class="built_in">int</span> <span class="built_in">random</span> = (<span class="built_in">int</span>) (Math.<span class="built_in">random</span>() * <span class="number">50</span>);</span><br><span class="line">            canvas.drawRect((<span class="built_in">float</span>) (mViewWidth * <span class="number">0.4</span> / <span class="number">2</span> + mRectWidth * i + mOffset), mCurrentHeight[i] + <span class="built_in">random</span>,</span><br><span class="line">                    (<span class="built_in">float</span>) (mViewWidth * <span class="number">0.4</span> / <span class="number">2</span> + mRectWidth * (i + <span class="number">1</span>)), mRectHeight, mPaint);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//没有指定则使用随机数的高度</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; mRectCount; i++) &#123;</span><br><span class="line">            <span class="built_in">int</span> currentHeight = <span class="number">0</span>;</span><br><span class="line">            canvas.drawRect((<span class="built_in">float</span>) (mViewWidth * <span class="number">0.4</span> / <span class="number">2</span> + mRectWidth * i + mOffset), currentHeight,</span><br><span class="line">                    (<span class="built_in">float</span>) (mViewWidth * <span class="number">0.4</span> / <span class="number">2</span> + mRectWidth * (i + <span class="number">1</span>)), mRectHeight, mPaint);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//让View延时mDelayTime毫秒再重绘</span></span><br><span class="line">    postInvalidateDelayed(mDelayTime);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="九、公开方法使使用者可以定义每个小矩形的高度"><a href="#九、公开方法使使用者可以定义每个小矩形的高度" class="headerlink" title="九、公开方法使使用者可以定义每个小矩形的高度"></a>九、公开方法使使用者可以定义每个小矩形的高度</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 公开方法设置小矩形高度</span></span><br><span class="line"><span class="comment"> * @param currentHeight</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCurrentHeight</span><span class="params">(<span class="keyword">float</span>[] currentHeight)</span></span>&#123;</span><br><span class="line">    mCurrentHeight = currentHeight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="十、使用自定义view"><a href="#十、使用自定义view" class="headerlink" title="十、使用自定义view"></a>十、使用自定义view</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">com.codekong.customview.view.AudioBarGraph</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/id_abg"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">app:rectCount</span>=<span class="string">"20"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> AudioBarGraph audioBarGraph = (AudioBarGraph) findViewById(R.id.id_abg);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">float</span>[] m = <span class="keyword">new</span> <span class="keyword">float</span>[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m.length; i++) &#123;</span><br><span class="line">                m[i] = (<span class="keyword">float</span>) (Math.random() * <span class="number">100</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            audioBarGraph.setCurrentHeight(m);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">300</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面为了模拟音频的高低，开了一个子线程用来产生随机数并且设置给我们的自定义View，真实的环境中我们可以获取正式的音频高度来进行设置</p>
+</blockquote>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><blockquote>
+<p>这只是一个简单的自定义View，查看源代码及更多自定义View，大家可以查看我的<code>GitHub</code>地址, <a href="https://github.com/codekongs/CustomView" target="_blank" rel="noopener">https://github.com/codekongs/CustomView</a> 上面有详细的使用说明，欢迎大家start和fork，你也可以贡献自己的自定义View，使其更加丰富</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/自定义View/" rel="tag"># 自定义View</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/19/Android6-0新应用权限管理机制详解/" rel="next" title="Android6.0新应用权限管理机制详解">
+                <i class="fa fa-chevron-left"></i> Android6.0新应用权限管理机制详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/01/Android中实现滑动的七种方法/" rel="prev" title="Android中实现滑动的七种方法">
+                Android中实现滑动的七种方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="冰鉴IT" />
+            
+              <p class="site-author-name" itemprop="name">冰鉴IT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/bingjianit" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-edit"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/d45a57e50ce5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/codekongs" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:szh@codekong.cn" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、定义类继承自View并修改构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">一、定义类继承自View并修改构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、在布局文件中引用自定义View"><span class="nav-number">1.2.</span> <span class="nav-text">二、在布局文件中引用自定义View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、定义成员变量以备后面使用"><span class="nav-number">1.3.</span> <span class="nav-text">三、定义成员变量以备后面使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、在xml文件中定义自定义属性"><span class="nav-number">1.4.</span> <span class="nav-text">四、在xml文件中定义自定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、获取自定义属性，并初始化变量"><span class="nav-number">1.5.</span> <span class="nav-text">五、获取自定义属性，并初始化变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、重写onMeasure-方法"><span class="nav-number">1.6.</span> <span class="nav-text">六、重写onMeasure()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、重写onSizeChanged-方法"><span class="nav-number">1.7.</span> <span class="nav-text">七、重写onSizeChanged()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#八、重写onDraw-方法开始绘制View"><span class="nav-number">1.8.</span> <span class="nav-text">八、重写onDraw()方法开始绘制View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#九、公开方法使使用者可以定义每个小矩形的高度"><span class="nav-number">1.9.</span> <span class="nav-text">九、公开方法使使用者可以定义每个小矩形的高度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#十、使用自定义view"><span class="nav-number">1.10.</span> <span class="nav-text">十、使用自定义view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后记"><span class="nav-number">1.11.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冰鉴IT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

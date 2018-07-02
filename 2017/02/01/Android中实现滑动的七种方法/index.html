@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="代码控" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="在Android中想要实现实现滑动有很多方法，这篇博客将提供一些实现滑动的思路，希望可以帮助到有需要的人。">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中实现滑动的七种方法">
+<meta property="og:url" content="http://www.codekong.cn/2017/02/01/Android中实现滑动的七种方法/index.html">
+<meta property="og:site_name" content="代码控">
+<meta property="og:description" content="在Android中想要实现实现滑动有很多方法，这篇博客将提供一些实现滑动的思路，希望可以帮助到有需要的人。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170202123346858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170202123448671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170202123533906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170202123610609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170202123635469?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-11T14:18:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中实现滑动的七种方法">
+<meta name="twitter:description" content="在Android中想要实现实现滑动有很多方法，这篇博客将提供一些实现滑动的思路，希望可以帮助到有需要的人。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170202123346858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.codekong.cn/2017/02/01/Android中实现滑动的七种方法/"/>
+
+
+
+
+
+  <title>Android中实现滑动的七种方法 | 代码控</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d828b53b3d89a2a12af4b9db0030499f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">代码控</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夫唯不争,故莫能与之争</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2017/02/01/Android中实现滑动的七种方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android中实现滑动的七种方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-01T15:23:54+08:00">
+                2017-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  在Android中想要实现实现滑动有很多方法，这篇博客将提供一些实现滑动的思路，希望可以帮助到有需要的人。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>在Android中想要实现实现滑动有很多方法，这篇博客将提供一些实现滑动的思路，希望可以帮助到有需要的人。</p>
+</blockquote>
+<h4 id="一、Android坐标体系"><a href="#一、Android坐标体系" class="headerlink" title="一、Android坐标体系"></a>一、Android坐标体系</h4><blockquote>
+<p>在讲解滑动之前，我们有必要简单提一下Android的坐标体系，因为滑动的实质就是坐标的不断改变，所以我们先来了解一下<code>Android坐标系</code>和<code>视图坐标系</code>两个概念。直接放上两张图片吧，一目了然。</p>
+</blockquote>
+<p><img src="http://img.blog.csdn.net/20170202123346858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="Android坐标系"></p>
+<p><img src="http://img.blog.csdn.net/20170202123448671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="视图坐标系"></p>
+<blockquote>
+<p>从上面的两张图可以看出，<code>Android坐标系</code>的坐标原点位于屏幕的左上角，而<code>视图坐标系</code>的原点位于父视图的左上角，既然提供了两种不同的坐标系，那么我们如何来获取坐标呢，Android已经给我们提供了一些方法用于获取这些坐标，看下面的图便一目了然。</p>
+</blockquote>
+<p><img src="http://img.blog.csdn.net/20170202123533906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="Android获取坐标的各种方法"></p>
+<h4 id="二、layout方法"><a href="#二、layout方法" class="headerlink" title="二、layout方法"></a>二、<code>layout</code>方法</h4><blockquote>
+<p>在View进行绘制时，是调用<code>onLayout()</code>方法来确定View的位置的，同样我们也可以调用<code>layout()</code>方法来传入我们滑动后的坐标便可以实现View的滑动，当然坐标的获取我们可以在触控事件中进行获取，下面我们做一个<code>View随手指进行滑动</code>的小例子来进行说明。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DragView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mLastX;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mLastY;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DragView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DragView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DragView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = (<span class="keyword">int</span>) event.getX();</span><br><span class="line">        <span class="keyword">int</span> y = (<span class="keyword">int</span>) event.getY();</span><br><span class="line">        <span class="keyword">int</span> lastX = <span class="number">0</span>, lastY = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">switch</span> (event.getAction())&#123;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">                mLastX = x;</span><br><span class="line">                mLastY = y;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">                <span class="keyword">int</span> offsetX = x - mLastX;</span><br><span class="line">                <span class="keyword">int</span> offsetY = y - mLastY;</span><br><span class="line">                layout(getLeft() + offsetX, getTop() + offsetY,</span><br><span class="line">                        getRight() + offsetX, getBottom() + offsetY);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面我们在触控事件中获取到获取到手指按下时的坐标(lastX, lastY)，然后在手指移动时不断计算X和Y方向上的偏移量，然后再调用<code>layout()</code>方法来改变View的位置从而实现滑动。当然上面我们是通过<code>getX()</code>和<code>getY()</code>来获取视图坐标来进行修改，我们也可以通过<code>getRawX()</code>和<code>getRawY()</code>来获取绝对坐标来实现上面的效果。代码如下:</p>
+</blockquote>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mLastX;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> mLastY;</span><br><span class="line">@Override</span><br><span class="line"><span class="function"><span class="keyword">public</span> boolean <span class="title">onTouchEvent</span>(<span class="params">MotionEvent <span class="keyword">event</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = (<span class="keyword">int</span>) <span class="keyword">event</span>.getRawX();</span><br><span class="line">    <span class="keyword">int</span> y = (<span class="keyword">int</span>) <span class="keyword">event</span>.getRawY();</span><br><span class="line">    <span class="keyword">switch</span> (<span class="keyword">event</span>.getAction())&#123;</span><br><span class="line">        <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">            mLastX = x;</span><br><span class="line">            mLastY = y;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">            <span class="keyword">int</span> offsetX = x - mLastX;</span><br><span class="line">            <span class="keyword">int</span> offsetY = y - mLastY;</span><br><span class="line">            layout(getLeft() + offsetX, getTop() + offsetY,</span><br><span class="line">                    getRight() + offsetX, getBottom() + offsetY);</span><br><span class="line">            <span class="comment">//重新设置初始坐标</span></span><br><span class="line">            mLastX = x;</span><br><span class="line">            mLastY = y;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面一定要注意，我们在改变完<code>View</code>的位置后必须调用设置初始坐标，这样才能准确获取偏移量。</p>
+</blockquote>
+<h4 id="三、offsetLeftAndRight和offsetTopAndBottom"><a href="#三、offsetLeftAndRight和offsetTopAndBottom" class="headerlink" title="三、offsetLeftAndRight和offsetTopAndBottom"></a>三、<code>offsetLeftAndRight</code>和<code>offsetTopAndBottom</code></h4><blockquote>
+<p>这一种方法和上一种方法大部分步骤都是相同的，只是在移动View上有所差别，代码如下:</p>
+</blockquote>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">offsetLeftAndRight(<span class="name">offsetX</span>)<span class="comment">;</span></span><br><span class="line">offsetTopAndBottom(<span class="name">offsetY</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的这种方法只是多了一层封装，可以实现比上面实现同样的效果。</p>
+</blockquote>
+<h4 id="四、设置LayoutParams"><a href="#四、设置LayoutParams" class="headerlink" title="四、设置LayoutParams"></a>四、设置<code>LayoutParams</code></h4><blockquote>
+<p><code>LayoutParams</code>可以通过改变的布局参数，我们可以通过下面的代码实现上面同样的效果。</p>
+</blockquote>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) getLayoutParams()<span class="comment">;</span></span><br><span class="line">layoutParams.leftMargin = getLeft() + offsetX<span class="comment">;</span></span><br><span class="line">layoutParams.topMargin = getTop() + offsetY<span class="comment">;</span></span><br><span class="line">setLayoutParams(layoutParams)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意:我们的<code>LayoutParams</code>可以通过<code>getLayoutParams()</code>方法来获取，但是要注意，如果View的父布局是<code>LinearLayout</code>，那么我们的<code>LayoutParams</code>就是<code>LinearLayout.LayoutParams</code>，如果View的父布局是<code>RelativeLayout</code>,则我们的<code>LayoutParams</code>就是<code>RelativeLayout.LayoutParams</code>。当然我们还有一种简单的方法，不用再管父布局的布局方式。代码如下:</p>
+</blockquote>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">ViewGroup.MarginLayoutParams</span> <span class="keyword">marginLayoutParams </span>= (ViewGroup.<span class="keyword">MarginLayoutParams) </span>getLayoutParams()<span class="comment">;</span></span><br><span class="line"><span class="keyword">marginLayoutParams.leftMargin </span>= getLeft() + offsetX<span class="comment">;</span></span><br><span class="line"><span class="keyword">marginLayoutParams.topMargin </span>= getTop() + offsetY<span class="comment">;</span></span><br><span class="line"><span class="symbol">setLayoutParams</span>(<span class="keyword">marginLayoutParams);</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的这种方法不用管父布局的类型，使用起来更加方便。</p>
+</blockquote>
+<h4 id="五、scrollTo和scrollBy方法"><a href="#五、scrollTo和scrollBy方法" class="headerlink" title="五、scrollTo和scrollBy方法"></a>五、<code>scrollTo</code>和<code>scrollBy</code>方法</h4><blockquote>
+<p>关于这两个方法我们需要仔细说一下其中的一些注意事项</p>
+</blockquote>
+<p>1 . <code>scrollTo</code>的参数是具体的一个坐标点(x, y), 而<code>scrollBy</code>的参数是在x, y方向上的坐标偏移</p>
+<p>2 . <code>scrollTo</code>和<code>scrollBy</code>移动的是View的内容。这一点很重要!!!!</p>
+<blockquote>
+<p>如果我们对<code>ViewGroup</code>使用<code>scrollTo</code>和<code>scrollBy</code>则移动的是内部的所有子View， 如果对<code>TextView</code>使用<code>scrollTo</code>和<code>scrollBy</code>则移动的是其中额文本。</p>
+</blockquote>
+<p>3 . 视图移动还有一个不太好理解的地方在于坐标，我们下面结合图片来说明一下：</p>
+<p><img src="http://img.blog.csdn.net/20170202123610609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="视图移动1"></p>
+<p><img src="http://img.blog.csdn.net/20170202123635469?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmluZ2ppYW5JVA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="视图移动2"></p>
+<blockquote>
+<p>我们可以这样理解，我们的手机屏幕作为一个盖板，在手机屏幕下面是一个巨大的画布，我们的手机屏幕这个盖板是透明的，导致只有和手机屏幕重合的画布部分才会被我们看到，我们调用<code>scrollTo</code>和<code>scrollBy</code>也可以理解为是在移动手机上面的盖板。如图中所示，按钮在<code>ViewGroup</code>中的坐标是<code>(20, 10)</code>,当我们调用<code>scrollBy(20, 10)</code>之后，就相当于移动了屏幕上的盖板，然后我们看到的按钮就到了<code>ViewGroup</code>的左上角。这样如果我们想让按钮在水平和竖直方向上各移动<code>20</code>和<code>10</code>个单位，我们就必须调用<code>scrollBy(-20, -10)</code></p>
+</blockquote>
+<p>经过了上面的知识准备，我们这里也使用<code>scrollBy</code>来实现前面实现的那个<code>View随手指移动</code>的小例子:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((View)getParent()).<span class="keyword">scrollBy(-offsetX, </span>-offsetY)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<h4 id="六、使用Scroller"><a href="#六、使用Scroller" class="headerlink" title="六、使用Scroller"></a>六、使用<code>Scroller</code></h4><blockquote>
+<p><code>Scroller</code>也是滑动中很重要的一个角色,进过前面的<code>scrollTo</code>和<code>scrollBy</code>大家也会发现，它们的移动时瞬间完成的，滑动显得十分突兀，Google为了改善用户体验，便给出了<code>Scroller</code>，它可以实现平滑的移动，从而使滑动过程更加真实，用户体验更好，下面我们先简单说说<code>Scroller</code>的实现原理。</p>
+</blockquote>
+<p><code>Scroller</code>的实现方式类似于<code>scrollTo</code>和<code>scrollBy</code>，<code>scrollTo</code>和<code>scrollBy</code>的移动都是从一个坐标点瞬间移动到另一个左边点，而<code>Scroller</code>则是将移动的这段距离切分成好几段的微小的位移，然后每一段调用<code>scrollTo</code>来不断移动这些微小的位移，由于人眼的视觉暂留效果，就会给人平滑移动的视觉效果。</p>
+<blockquote>
+<p>下面我们在上一步的基础上增加一个小功能，第一部分还是View随手指移动，但是当我们松开手指时，让View自己平滑移动到最初始的位置(屏幕左上角),下面我们就来一步步介绍<code>Scroller</code>的用法</p>
+</blockquote>
+<p>1 . 声明<code>Scroller</code>变量,并在构造方法中进行初始化</p>
+<p>2 . 在触控事件的<code>ACTION_UP</code>(手指抬起)事件中传入开始滑动的坐标和需要滑动的距离并触发<code>Scroller</code>的滑动事件</p>
+<p>3 . 重写<code>computeScroll()</code>,实现真正的滑动</p>
+<p>下面是完整的代码示例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DragView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mLastX;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mLastY;</span><br><span class="line">    <span class="comment">//声明Scroller变量</span></span><br><span class="line">    <span class="keyword">private</span> Scroller mScroller;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DragView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DragView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DragView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">        <span class="comment">//在构造方法中初始化Scroller变量</span></span><br><span class="line">        mScroller = <span class="keyword">new</span> Scroller(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = (<span class="keyword">int</span>) event.getRawX();</span><br><span class="line">        <span class="keyword">int</span> y = (<span class="keyword">int</span>) event.getRawY();</span><br><span class="line">        <span class="keyword">switch</span> (event.getAction())&#123;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">                mLastX = x;</span><br><span class="line">                mLastY = y;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">                <span class="keyword">int</span> offsetX = x - mLastX;</span><br><span class="line">                <span class="keyword">int</span> offsetY = y - mLastY;</span><br><span class="line">                <span class="comment">//实现View跟随手指移动的效果</span></span><br><span class="line">                ((View)getParent()).scrollBy(-offsetX, -offsetY);</span><br><span class="line">                <span class="comment">//重新设置初始坐标</span></span><br><span class="line">                mLastX = x;</span><br><span class="line">                mLastY = y;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">                <span class="comment">//当手指抬起时执行滑动过程</span></span><br><span class="line">                View view = (View) getParent();</span><br><span class="line">                mScroller.startScroll(view.getScrollX(), view.getScrollY(),</span><br><span class="line">                        view.getScrollX(), view.getScrollY(), <span class="number">5000</span>);</span><br><span class="line">                <span class="comment">//调用重绘来间接调用computeScroll()方法</span></span><br><span class="line">                invalidate();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">computeScroll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.computeScroll();</span><br><span class="line">        <span class="comment">//判断滑动过程是否完成</span></span><br><span class="line">        <span class="keyword">if</span> (mScroller.computeScrollOffset())&#123;</span><br><span class="line">            ((View)getParent()).scrollTo(mScroller.getCurrX(), mScroller.getCurrY());</span><br><span class="line">            <span class="comment">//通过重绘来不断调用computeScroll()方法</span></span><br><span class="line">            invalidate();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的代码View随手指移动的代码部分是与前面相同的，我们只说说<code>Scroller</code>的部分以及一些注意事项</p>
+</blockquote>
+<p>1 .  <code>startScroll()</code>方法各参数的意义,我们可以看看下面的源码:<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Start scrolling by providing a starting point, the distance to travel,</span></span><br><span class="line"><span class="comment"> * and the duration of the scroll.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> startX Starting horizontal scroll offset in pixels. Positive</span></span><br><span class="line"><span class="comment"> *        numbers will scroll the content to the left.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> startY Starting vertical scroll offset in pixels. Positive numbers</span></span><br><span class="line"><span class="comment"> *        will scroll the content up.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dx Horizontal distance to travel. Positive numbers will scroll the</span></span><br><span class="line"><span class="comment"> *        content to the left.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dy Vertical distance to travel. Positive numbers will scroll the</span></span><br><span class="line"><span class="comment"> *        content up.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> duration Duration of the scroll in milliseconds.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> startScroll(<span class="keyword">int</span> startX, <span class="keyword">int</span> startY, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy, <span class="keyword">int</span> duration)</span><br></pre></td></tr></table></figure></p>
+<p>可以看出<code>startX</code>和<code>startY</code>参数就是开始滚动的<code>(x, y)</code>坐标，那么我们就可以通过<code>ViewGroup(子View的父视图)</code>的<code>getScrollX()</code>和<code>getScrollY()</code>来获取,这里一定要注意，我们在滑动时的<code>content</code>就是<code>子View</code>，所以我们通过子View的父视图(ViewGroup)的<code>getScrollX()</code>和<code>getScrollY()</code>获取到的就是子View在X和Y方向上滑动的距离，即就是我们需要的当我们手指抬起时子View的(x, y)坐标。而如果我们对子View调用<code>getScrollX()</code>和<code>getScrollY()</code>方法，则获得的是子View内部的视图的滑动距离及坐标。</p>
+<p><code>dx</code>和<code>dy</code>分别是在X和Y方向上的偏移量，而且注释中说了，如果我们传入的<code>dx</code>和<code>dy</code>的值是正值，那么将会向上向左移动这个<code>content(其实就是我们这里的View)</code>，即我们就可以让子View回到左上角，这里我们还是可以借助于上一小节中提到的视图移动的概念，我们想让子View向坐上方移动，其实就是想让覆盖在上面的盖板向右下角移动，我们可以将<code>dx</code>和<code>dy</code>理解为父视图(覆盖在上面的盖板)的偏移量。</p>
+<p>假设我们刚开始是让子View随手指向右下方移动，那么相当于覆盖在上面的盖板是向左上方移动，所以我们通过<code>getScrollX()</code>和<code>getScrollY()</code>获得的值是负值，我们现在松开手指想让子View向左上方移动(即回到屏幕左上角)，那么就相当于盖板向右下角移动，所以我们的<code>dx</code>和<code>dy</code>的值必须是<code>-getScrollX()</code>和<code>-getScrollY()</code>，此时的两个值都是正值。</p>
+<p>2 . 由于我们的<code>computeScroll()</code>方法不会主动调用，但是我们又需要它不断调用从而不断进行微小移动从而实现平滑的滑动，所以我们可以通过下面的方法。</p>
+<blockquote>
+<p>这三个按照以下顺序进行调用 <code>invalidate()</code>—&gt;<code>onDraw()</code>—&gt;<code>computeScroll()</code>，所以我们可以可以在<code>ACTION_UP</code>中调用完<code>startScroll()</code>方法后调用<code>invalidate()</code>方法,然后在<code>computeScroll()</code>方法中判断滑动是否结束,如果没结束，则通过<code>getCurrX()</code>和<code>getCurrY()</code>来获得当前需要移动的微小的位移的坐标点，然后传入<code>scrollTo()</code>方法中，这时候子View还只是移动了一小段距离，然后我们再次调用<code>invalidate()</code>方法，然后接着调用<code>onDraw()</code>方法，然后再次进入<code>computeScroll()</code>中再次让子View移动一小段距离，直到滑动结束,<code>computeScrollOffset()</code>返回<code>false</code>，则这个循环调用的过程结束，从而完成平滑移动的过程。</p>
+</blockquote>
+<h4 id="七、属性动画"><a href="#七、属性动画" class="headerlink" title="七、属性动画"></a>七、属性动画</h4><blockquote>
+<p>属性动画一样可以实现View的滑动，但是由于属性动画涉及到的知识点也是众多，这里不再展开来写，只是提供一个思路，后续后专门写一篇博客来说。</p>
+</blockquote>
+<h4 id="八、ViewDragHelper"><a href="#八、ViewDragHelper" class="headerlink" title="八、ViewDragHelper"></a>八、ViewDragHelper</h4><blockquote>
+<p>ViewDragHelper可以帮助我们实现各种滑动需求，但是它的使用也相对较复杂，所以准备专门写一篇博客来介绍他，这里只是给出一个概念</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/25/Android自定义View之音频条形图/" rel="next" title="Android自定义View之音频条形图">
+                <i class="fa fa-chevron-left"></i> Android自定义View之音频条形图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/02/Android中的ViewDragHelper/" rel="prev" title="Android中的ViewDragHelper">
+                Android中的ViewDragHelper <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="冰鉴IT" />
+            
+              <p class="site-author-name" itemprop="name">冰鉴IT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/bingjianit" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-edit"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/d45a57e50ce5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/codekongs" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:szh@codekong.cn" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、Android坐标体系"><span class="nav-number">1.</span> <span class="nav-text">一、Android坐标体系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、layout方法"><span class="nav-number">2.</span> <span class="nav-text">二、layout方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、offsetLeftAndRight和offsetTopAndBottom"><span class="nav-number">3.</span> <span class="nav-text">三、offsetLeftAndRight和offsetTopAndBottom</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、设置LayoutParams"><span class="nav-number">4.</span> <span class="nav-text">四、设置LayoutParams</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#五、scrollTo和scrollBy方法"><span class="nav-number">5.</span> <span class="nav-text">五、scrollTo和scrollBy方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#六、使用Scroller"><span class="nav-number">6.</span> <span class="nav-text">六、使用Scroller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#七、属性动画"><span class="nav-number">7.</span> <span class="nav-text">七、属性动画</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#八、ViewDragHelper"><span class="nav-number">8.</span> <span class="nav-text">八、ViewDragHelper</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冰鉴IT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

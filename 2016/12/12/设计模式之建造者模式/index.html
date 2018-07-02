@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="构建者模式," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="代码控" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="建造者模式(Builder Pattern)也叫做生成器模式,今天让我们一起学习一下建造者模式">
+<meta name="keywords" content="构建者模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之建造者模式">
+<meta property="og:url" content="http://www.codekong.cn/2016/12/12/设计模式之建造者模式/index.html">
+<meta property="og:site_name" content="代码控">
+<meta property="og:description" content="建造者模式(Builder Pattern)也叫做生成器模式,今天让我们一起学习一下建造者模式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-11T14:18:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式之建造者模式">
+<meta name="twitter:description" content="建造者模式(Builder Pattern)也叫做生成器模式,今天让我们一起学习一下建造者模式">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.codekong.cn/2016/12/12/设计模式之建造者模式/"/>
+
+
+
+
+
+  <title>设计模式之建造者模式 | 代码控</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d828b53b3d89a2a12af4b9db0030499f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">代码控</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夫唯不争,故莫能与之争</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2016/12/12/设计模式之建造者模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式之建造者模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-12T08:05:57+08:00">
+                2016-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  建造者模式(Builder Pattern)也叫做生成器模式,今天让我们一起学习一下建造者模式
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>建造者模式(Builder Pattern)也叫做生成器模式,今天让我们一起学习一下建造者模式。</p>
+</blockquote>
+<h4 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h4><blockquote>
+<p>建造者模式的定义为:<code>将一个复杂对象的构建和它的表示分离开,使得同样的构建过程可以创建不同的表示。</code></p>
+</blockquote>
+<p>建造者模式主要由4个角色来组成:</p>
+<p>1 . 抽象建造者(Builder)角色:该角色用于规范产品的各个组成部分,并进行抽象,一般独立于应用程序的逻辑。</p>
+<p>2 . 具体建造者(Concrete Builder)角色:该角色实现抽象建造者中定义的所有方法,并且返回一个组建好的产品实例。</p>
+<p>3 . 产品(Product)角色:该角色是建造者中的复杂对象,一个系统中会有多于一个的产品类,这些产品类并不一定有共同的接口,完全可以是不相关联的。</p>
+<p>4 . 导演者(Director)角色:该角色负责安排已有模块的顺序,然后告诉Builder开始建造。</p>
+<h4 id="二、代码实现建造者模式"><a href="#二、代码实现建造者模式" class="headerlink" title="二、代码实现建造者模式"></a>二、代码实现建造者模式</h4><blockquote>
+<p>上面说的东西都只是理论,多少有些空洞,现在我们就通过一个简单的例子来体验一下建造者模式。</p>
+</blockquote>
+<p>1 . 创建产品类<code>Product.java</code>类<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 产品类</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">	<span class="comment">//业务处理方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>由于我们的目的是最终生产产品,所以产品类中的逻辑实现我们暂且不关注,具体的方法要根据业务来写。</p>
+</blockquote>
+<p>2 . 创建抽象建造者类<code>Builder.java</code>类<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 抽象建造者类</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Builder</span> &#123;</span><br><span class="line">	<span class="comment">//设置产品的不同部分,以获得不同的产品</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setPart1</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setPart2</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setPart3</span>(<span class="params"></span>)</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//建造产品</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Product <span class="title">builderProduct</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>该类是一个抽象类,其中我们声明了4个抽象方法,前面三个是负责给产品添加不同的部件,第四个方法是负责建造产品。但这只是一个框架,还没有具体的实现。</p>
+</blockquote>
+<p>3 . 创建具体建造者类<code>ConcreteBuilder.java</code>类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *具体建造者类</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteBuilder</span> <span class="keyword">extends</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">	<span class="comment">//一个产品</span></span><br><span class="line">	<span class="keyword">private</span> Product product = <span class="keyword">new</span> Product();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//开始安装产品的部件</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPart1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//为product安装部件1</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPart2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//为product安装部件2</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPart3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//为product安装部件3</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//建造一个产品</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Product <span class="title">builderProduct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> product;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>该类会继承自抽象建造者类<code>Builder</code>,并实现其中的方法。开始先声明一个产品,然后在各个<code>setPart3</code>方法中添加具体的逻辑,然后在<code>builderProduct()</code>方法中返回生产好的产品。</p>
+</blockquote>
+<p>4 . 创建导演类<code>Director()</code>类</p>
+<blockquote>
+<p>上面我们已经实现了具体的建造者类,也具体写好了安装每个部件的方法,最后一步就是由导演类来知道具体构建者类如何制造产品啦。制造完的产品会交给导演类负责处理。</p>
+</blockquote>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 导演类</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Director1</span> &#123;</span></span><br><span class="line">	private <span class="type">Builder</span> builder = <span class="function"><span class="keyword">new</span> <span class="title">ConcreteBuilder</span>();</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	<span class="comment">//构建产品,调用各个添加部件的方法</span></span></span><br><span class="line"><span class="function">	<span class="title">public</span> <span class="title">Product</span> <span class="title">build</span>()&#123;</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">setPart1</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">setPart2</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">setPart3</span>();</span></span><br><span class="line"><span class="function">		<span class="comment">//调用构建产品的方法来构建产品</span></span></span><br><span class="line"><span class="function">		<span class="title">return</span> <span class="title">builder</span>.<span class="title">builderProduct</span>();</span></span><br><span class="line"><span class="function">	&#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个类很简单,其实就是获得一个具体的建造者对象,然后调用具体的方法给产品安装部件,安装完成后调用<code>builder.builderProduct()</code>方法获得建造好的产品,此处导演类是在<code>build()</code>方法中完成了建造过程,同时将获得的建造好的产品返回出去,以供其他模块使用该产品。</p>
+</blockquote>
+<blockquote>
+<p>此处的导演类起到了封装左右,可以避免高层模块深入到建造者内部的实现类,而且导演类可以有多个,根据业务逻辑分别用来建造不同的产品并输出。</p>
+</blockquote>
+<h4 id="三、建造者模式的优点"><a href="#三、建造者模式的优点" class="headerlink" title="三、建造者模式的优点"></a>三、建造者模式的优点</h4><blockquote>
+<p>建造者模式的有点主要有以下几点:</p>
+</blockquote>
+<p>1 . <code>封装性</code>。使用建造者模式可以使客户端不必知道产品的内部实现细节</p>
+<p>2 . <code>独立易扩展</code>。由于建造过程是独立的,更利于后期扩展</p>
+<p>3 . <code>便于控制细节风险</code>。由于具体的产品建造是独立的,因此可以对建造过程逐步细化,而不对其他的模块产生任何影响</p>
+<h4 id="四、建造者模式的使用场景"><a href="#四、建造者模式的使用场景" class="headerlink" title="四、建造者模式的使用场景"></a>四、建造者模式的使用场景</h4><blockquote>
+<p>说了这么多建造者模式的好处,那我们应该在什么场合使用它们呢,看下面:</p>
+</blockquote>
+<p>1 . 相同的方法,不同的执行顺序,产生不同的结果。这种情况我们只要利用不同的导演类来控制建造过程,就可以产生不同的产品,其他部分不用修改</p>
+<p>2 . 多个零件和部件,都可以装配到一个对象中,装配不同的零件,产生不同的运行结果,我们同样可以通过修改导演类来产生不同的产品</p>
+<p>3 . 产品类非常复杂,此时我们也可以将产品的建造方法和具体的建造顺序分离开来处理</p>
+<p>4 . 在对象创建过程中会用到系统的一些其他对象,这些对象在产品对象的创建过程中不容易得到,可以采用建造者模式封装该对象的创建过程</p>
+<p><strong>注:建造者模式关注的是零件的类型和装配工艺的顺序</strong></p>
+<h4 id="五、建造者模式实站"><a href="#五、建造者模式实站" class="headerlink" title="五、建造者模式实站"></a>五、建造者模式实站</h4><blockquote>
+<p>说了半天建造产品,没行动有卵用,来来来,咋们就用刚学的<code>建造者模式生产两台不同类型的电脑</code>练练手,代码敲起来</p>
+</blockquote>
+<p>1 . 创建产品父类<code>Computer</code>类</p>
+<blockquote>
+<p>该类是我们建造的计算机的父类,其中包含了计算机的公共属性以及属性的get和set方法</p>
+</blockquote>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">package cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 计算机类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> Computer &#123;</span><br><span class="line">	<span class="comment">//型号</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">String</span> <span class="keyword">type</span>;</span><br><span class="line">	<span class="comment">//CPU</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">String</span> cpu;</span><br><span class="line">	<span class="comment">//内存</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">String</span> ram;</span><br><span class="line">	<span class="comment">//硬盘</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">String</span> hardDisk;</span><br><span class="line">	<span class="comment">//显示器</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">String</span> monitor;</span><br><span class="line">	<span class="comment">//操作系统</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">String</span> os;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//对应的get和set方法</span></span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">String</span> getType() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">type</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">void</span> setType(<span class="built_in">String</span> <span class="keyword">type</span>) &#123;</span><br><span class="line">		<span class="keyword">this</span>.type = <span class="keyword">type</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">String</span> getCpu() &#123;</span><br><span class="line">		<span class="keyword">return</span> cpu;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">void</span> setCpu(<span class="built_in">String</span> cpu) &#123;</span><br><span class="line">		<span class="keyword">this</span>.cpu = cpu;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">String</span> getRam() &#123;</span><br><span class="line">		<span class="keyword">return</span> ram;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">void</span> setRam(<span class="built_in">String</span> ram) &#123;</span><br><span class="line">		<span class="keyword">this</span>.ram = ram;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">String</span> getHardDisk() &#123;</span><br><span class="line">		<span class="keyword">return</span> hardDisk;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">void</span> setHardDisk(<span class="built_in">String</span> hardDisk) &#123;</span><br><span class="line">		<span class="keyword">this</span>.hardDisk = hardDisk;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">String</span> getMonitor() &#123;</span><br><span class="line">		<span class="keyword">return</span> monitor;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">void</span> setMonitor(<span class="built_in">String</span> monitor) &#123;</span><br><span class="line">		<span class="keyword">this</span>.monitor = monitor;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">String</span> getOs() &#123;</span><br><span class="line">		<span class="keyword">return</span> os;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">void</span> setOs(<span class="built_in">String</span> os) &#123;</span><br><span class="line">		<span class="keyword">this</span>.os = os;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2 . 创建具体的产品类<code>T410</code>类和<code>X201</code>类</p>
+<blockquote>
+<p>这两个类均继承自上面的<code>Computer</code>类,并且我们在该类在添加了两台计算机特有的属性,<code>T410</code>计算机用于独立显卡,而<code>X201</code>没有,同时重写了它们的<code>toString()</code>方法,返回它们的参数,便于最后我们建造完计算机后输出它们各自的配置参数.</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">T410</span><span class="selector-class">.java</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">T410</span> <span class="title">extends</span> <span class="title">Computer</span></span>&#123;</span><br><span class="line">	<span class="comment">//显卡</span></span><br><span class="line">	<span class="keyword">private</span> String graphicCard;</span><br><span class="line">	<span class="keyword">public</span> T410() &#123;</span><br><span class="line">		<span class="keyword">this</span>.setType(<span class="string">"Thinkpad T410"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> String getGraphicCard()&#123;</span><br><span class="line">		<span class="keyword">return</span> graphicCard;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> void setGraphicCard(String graphicCard)&#123;</span><br><span class="line">		<span class="keyword">this</span>.graphicCard = graphicCard;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String toString() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"型号:\t"</span> + <span class="keyword">this</span>.getType() + <span class="string">"\nCPU\t"</span> + <span class="keyword">this</span>.getCpu()</span><br><span class="line">				+ <span class="string">"\n内存\t"</span> + <span class="keyword">this</span>.getRam() + <span class="string">"\n硬盘\t"</span> + <span class="keyword">this</span>.getHardDisk()</span><br><span class="line">				+ <span class="string">"\n显卡\t"</span> + <span class="keyword">this</span>.getGraphicCard() + <span class="string">"\n显示器\t"</span> + <span class="keyword">this</span>.getMonitor()</span><br><span class="line">				+ <span class="string">"\n操作系统\t"</span> + <span class="keyword">this</span>.getOs();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">X201</span><span class="selector-class">.java</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">X201</span> <span class="title">extends</span> <span class="title">Computer</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> X201() &#123;</span><br><span class="line">		<span class="keyword">this</span>.setType(<span class="string">"Thinkpad X201"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String toString() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"型号:\t"</span> + <span class="keyword">this</span>.getType() + <span class="string">"\nCPU\t"</span> + <span class="keyword">this</span>.getCpu()</span><br><span class="line">				+ <span class="string">"\n内存\t"</span> + <span class="keyword">this</span>.getRam() + <span class="string">"\n硬盘\t"</span> + <span class="keyword">this</span>.getHardDisk()</span><br><span class="line">				+ <span class="string">"\n显示器\t"</span> + <span class="keyword">this</span>.getMonitor() + <span class="string">"\n操作系统\t"</span> + <span class="keyword">this</span>.getOs();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的(1)(2)步只是相当于我们有了我们需要的产品类已经声明好了,下面开始写我们的抽象建造类</p>
+</blockquote>
+<p>3 . 抽象计算机建造类<code>ComputerBuilder</code>类</p>
+<blockquote>
+<p>我们创建了一个接口,在其中声明了我们要建造产品过程中需要用到的方法,其实就是产品的各个建造步骤</p>
+</blockquote>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package cn.codekong.start;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 抽象的计算机建造者</span></span><br><span class="line"><span class="comment"> * 声明建造的公共方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">ComputerBuilder</span> &#123;</span><br><span class="line">	<span class="comment">//建造CPU</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildCpu</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="comment">//建造内存</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildRam</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="comment">//建造硬盘</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildHardDisk</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="comment">//建造显卡</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildGraphicCard</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="comment">//建造显示器</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildMonitor</span>(<span class="params"></span>)</span>;</span><br><span class="line">	<span class="comment">//建造操作系统</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildOs</span>(<span class="params"></span>)</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//得到建造好的计算机</span></span><br><span class="line">	<span class="function">Computer <span class="title">getResult</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4 . 创建具体的建造类<code>T410Builder</code>类和<code>X201Builder</code>类</p>
+<blockquote>
+<p>这两个类要实现上一步定义的接口,然后实现里面的各个方法,其实就是实现各个具体的组装方法中的逻辑,但此时只是把每一个组装的步骤的逻辑具体化了,还没有开始正式组装。</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">T410Builder</span><span class="selector-class">.java</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * T410的具体建造者实现抽象的计算机建造者</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">T410Builder</span> <span class="keyword">implements</span> <span class="title">ComputerBuilder</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> T410 computer = <span class="keyword">new</span> T410();</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildCpu</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setCpu(<span class="string">"i5-450"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildRam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setRam(<span class="string">"4G 1333MHz"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildHardDisk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setHardDisk(<span class="string">"500G 7200转"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGraphicCard</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setGraphicCard(<span class="string">"Nvidia"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildMonitor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setMonitor(<span class="string">"14英寸 1280*800"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildOs</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setOs(<span class="string">"Windows7 旗舰版"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Computer <span class="title">getResult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> computer;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">X201Builder</span><span class="selector-class">.java</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * X201计算机的具体建造类实现抽象的计算机建造类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">X201Builder</span> <span class="keyword">implements</span> <span class="title">ComputerBuilder</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> X201 computer = <span class="keyword">new</span> X201();</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildCpu</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setCpu(<span class="string">"i3-350"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildRam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setRam(<span class="string">"2G 1333M"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildHardDisk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setHardDisk(<span class="string">"250G 5400 转"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGraphicCard</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//无独立显卡</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildMonitor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setMonitor(<span class="string">"12英寸 1280*800"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildOs</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		computer.setOs(<span class="string">"Windows7 Home版"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Computer <span class="title">getResult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> computer;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>5 . 导演类知道具体的建造者类建造产品<code>ComputerDirector</code>类</p>
+<blockquote>
+<p>该类就比较简单了,在该类内部实现两个构造方法,分别对应实现两种计算机的过程,这时候才是正式的建造过程。</p>
+</blockquote>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">package cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 计算机导演类,知道具体建造者建造计算机</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ComputerDirector</span> &#123;</span></span><br><span class="line">	<span class="type">ComputerBuilder</span> builder;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//建造T410计算机</span></span><br><span class="line">	public <span class="type">T410</span> constructT410()&#123;</span><br><span class="line">		builder = <span class="function"><span class="keyword">new</span> <span class="title">T410Builder</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildCpu</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildRam</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildHardDisk</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildGraphicCard</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildMonitor</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildOs</span>();</span></span><br><span class="line"><span class="function">		<span class="comment">//建造结束将产品返回供外部使用</span></span></span><br><span class="line"><span class="function">		<span class="title">return</span> (<span class="type">T410</span>)<span class="title">builder</span>.<span class="title">getResult</span>();</span></span><br><span class="line"><span class="function">	&#125;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	<span class="comment">//建造X201计算机</span></span></span><br><span class="line"><span class="function">	<span class="title">public</span> <span class="title">X201</span> <span class="title">constructX201</span>()&#123;</span></span><br><span class="line"><span class="function">		<span class="title">builder</span> = <span class="title">new</span> <span class="title">X201Builder</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildCpu</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildRam</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildHardDisk</span>();</span></span><br><span class="line"><span class="function">		<span class="comment">//由于X201没有独立显卡,则不调用buildGraphicCard()函数</span></span></span><br><span class="line"><span class="function">		<span class="comment">//builder.buildGraphicCard();</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildMonitor</span>();</span></span><br><span class="line"><span class="function">		<span class="title">builder</span>.<span class="title">buildOs</span>();</span></span><br><span class="line"><span class="function">		<span class="comment">//建造结束将产品返回供外部使用</span></span></span><br><span class="line"><span class="function">		<span class="title">return</span> (<span class="type">X201</span>)<span class="title">builder</span>.<span class="title">getResult</span>();</span></span><br><span class="line"><span class="function">	&#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>6 . 最后让我们测试一下建造的产品是否是好的,新建测试类<code>ComputerTest</code>类</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package cn.codekong.start;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 计算机建造测试类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ComputerTest</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>&#123;</span><br><span class="line">		ComputerDirector computerDirector = <span class="keyword">new</span> ComputerDirector();</span><br><span class="line">		<span class="comment">//建造T410计算机</span></span><br><span class="line">		Computer t410 = computerDirector.constructT410();</span><br><span class="line">		<span class="comment">//输出T410计算机的配置参数</span></span><br><span class="line">		System.<span class="keyword">out</span>.println(t410);</span><br><span class="line"></span><br><span class="line">		System.<span class="keyword">out</span>.println(<span class="string">"------------我是分割线----------------"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//建造X201计算机</span></span><br><span class="line">		Computer x201 = computerDirector.constructX201();</span><br><span class="line">		<span class="comment">//输出X201的计算机配置</span></span><br><span class="line">		System.<span class="keyword">out</span>.println(x201);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出结果如下</p>
+</blockquote>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">型号:	Thinkpad</span> <span class="comment">T410</span></span><br><span class="line"><span class="comment">CPU	i5</span><span class="literal">-</span><span class="comment">450</span></span><br><span class="line"><span class="comment">内存	4G</span> <span class="comment">1333MHz</span></span><br><span class="line"><span class="comment">硬盘	500G</span> <span class="comment">7200转</span></span><br><span class="line"><span class="comment">显卡	Nvidia</span></span><br><span class="line"><span class="comment">显示器	14英寸</span> <span class="comment">1280*800</span></span><br><span class="line"><span class="comment">操作系统	Windows7</span> <span class="comment">旗舰版</span></span><br><span class="line"><span class="comment"></span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="comment">我是分割线</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span></span><br><span class="line"><span class="comment">型号:	Thinkpad</span> <span class="comment">X201</span></span><br><span class="line"><span class="comment">CPU	i3</span><span class="literal">-</span><span class="comment">350</span></span><br><span class="line"><span class="comment">内存	2G</span> <span class="comment">1333M</span></span><br><span class="line"><span class="comment">硬盘	250G</span> <span class="comment">5400</span> <span class="comment">转</span></span><br><span class="line"><span class="comment">显示器	12英寸</span> <span class="comment">1280*800</span></span><br><span class="line"><span class="comment">操作系统	Windows7</span> <span class="comment">Home版</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>好了,经过上面的步骤,我们的产品就建造好咯。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>这时候有人会说,你这个例子还是不接地气啊,我怎么没见过什么程序这么写呢,好,那咋就来一个接地气的例子,看下面的代码:</p>
+</blockquote>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">AlertDialog</span> alertDialog = <span class="function"><span class="keyword">new</span> <span class="title">AlertDialog</span>.<span class="title">Builder</span>(this)</span></span><br><span class="line"><span class="function">                .<span class="title">setTitle</span>("我是标题")</span></span><br><span class="line"><span class="function">                .<span class="title">setIcon</span>(<span class="type">R</span>.drawable.icon)</span></span><br><span class="line"><span class="function">                .<span class="title">show</span>();</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面是一个Android里面警告框的例子,我们可以通过链式调用的方法将标题和图标传入,然后调用show()方法就构建了一个警告框。这个例子是不是很常见,那我们就用一个类使用建造者模式实现一下吧:</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.codekong.my;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.Context;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyDialog</span> </span>&#123;</span><br><span class="line">	<span class="comment">//警告框标题</span></span><br><span class="line">	<span class="keyword">private</span> String title;</span><br><span class="line">	<span class="comment">//警告框图标资源Id</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> iconId;</span><br><span class="line">	<span class="comment">//上下文环境</span></span><br><span class="line">	<span class="keyword">private</span> Context context;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getTitle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> title;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getIconId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> iconId;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Context <span class="title">getContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> context;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">		<span class="comment">//设置默认值</span></span><br><span class="line">		<span class="keyword">private</span> String title = <span class="string">"Title"</span>;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">int</span> iconId = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">private</span> Context context;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.context = context;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Builder <span class="title">setTitle</span><span class="params">(String title)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.title = title;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Builder <span class="title">setIconId</span><span class="params">(<span class="keyword">int</span> iconId)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.iconId = iconId;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//应用我们的设置</span></span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">applyConfig</span><span class="params">(MyDialog myDialog)</span></span>&#123;</span><br><span class="line">			myDialog.title = title;</span><br><span class="line">			myDialog.iconId = iconId;</span><br><span class="line">			myDialog.context = context;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> MyDialog <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">			MyDialog myDialog = <span class="keyword">new</span> MyDialog();</span><br><span class="line">			applyConfig(myDialog);</span><br><span class="line">			<span class="keyword">return</span> myDialog;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的类主要涉及到以下几步:</p>
+</blockquote>
+<p>1 . 创建一个类,先声明他的成员变量以及成员变量的get方法(其实这一步就是建造者模式里面的<code>产品角色</code>,get方法是为了我们使用时可以随时查看我们自定义的产品属性)</p>
+<p>2 . 定义一个静态内部类<code>Builder</code>,然后把我们产品定义的属性在静态内部类中复制一份,同时生成它的set方法(这一步呢其实就是我们的<code>抽象建造者角色</code>,要注意的一点是为了实现链式调用,我们要让我们的set方法返回值为Builder, 同时在set方法中返回this,也就是返回本对象)</p>
+<p>3 . 接着定义<code>applyConfig()</code>方法,把我们通过set方法设置的值全部赋值给我们的外部类对应的成员变量(这一步就是我们的<code>具体的建造者</code>角色)</p>
+<p>4 . 最后对外提供一个<code>show()</code>方法,在其中先 new 出一个我们的MyDialog对象,然后把它传入调用applyConfig()方法,调用过后我们的myDialog对象就已经被设置属性了,我们此时就可以将这个设置过的对象传到外部供其他类使用(这一步就是我们的<code>导演角色</code>)</p>
+<blockquote>
+<p>当我们使用的时候就可以通过下面代码使用:</p>
+</blockquote>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">MyDialog</span> myDialog = <span class="function"><span class="keyword">new</span> <span class="title">MyDialog</span>.<span class="title">Builder</span>(this)</span></span><br><span class="line"><span class="function">		.<span class="title">setTitle</span>("我是标题")</span></span><br><span class="line"><span class="function">		.<span class="title">setIconId</span>(<span class="type">R</span>.drawable.icon)</span></span><br><span class="line"><span class="function">		.<span class="title">show</span>();</span></span><br></pre></td></tr></table></figure>
+<h4 id="六、后记"><a href="#六、后记" class="headerlink" title="六、后记"></a>六、后记</h4><blockquote>
+<p>以上就是建造者模式的全部内容,希望可以帮助到有需要的人.</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/构建者模式/" rel="tag"># 构建者模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/10/设计模式之单例模式/" rel="next" title="设计模式之单例模式">
+                <i class="fa fa-chevron-left"></i> 设计模式之单例模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/18/OkHttp使用详解/" rel="prev" title="OkHttp使用详解">
+                OkHttp使用详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="冰鉴IT" />
+            
+              <p class="site-author-name" itemprop="name">冰鉴IT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/bingjianit" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-edit"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/d45a57e50ce5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/codekongs" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:szh@codekong.cn" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、基本介绍"><span class="nav-number">1.</span> <span class="nav-text">一、基本介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、代码实现建造者模式"><span class="nav-number">2.</span> <span class="nav-text">二、代码实现建造者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、建造者模式的优点"><span class="nav-number">3.</span> <span class="nav-text">三、建造者模式的优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、建造者模式的使用场景"><span class="nav-number">4.</span> <span class="nav-text">四、建造者模式的使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#五、建造者模式实站"><span class="nav-number">5.</span> <span class="nav-text">五、建造者模式实站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#六、后记"><span class="nav-number">6.</span> <span class="nav-text">六、后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冰鉴IT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

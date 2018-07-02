@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="代码控" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="最近在模仿小米的文件管理器写一个自己的文件管理器，其中有一个功能是全盘扫描文件并显示每类文件的数目。刚开始使用单一线程，扫描速度简直惨不忍睹，换成多线程扫描以后，速度有较明显的提升，便封装了一个工具类，分享出来。  一、遇到的问题 首先描述一下遇到的问题:  1 . Android端全盘扫描文件 2 . 开一个子线程扫描太慢，使用多线程扫描 3 . 统计每一类文件的数目(比如:视频文件,图片文件">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android扫描文件并统计各类文件数目">
+<meta property="og:url" content="http://www.codekong.cn/2017/12/16/Android扫描文件并统计各类文件数目/index.html">
+<meta property="og:site_name" content="代码控">
+<meta property="og:description" content="最近在模仿小米的文件管理器写一个自己的文件管理器，其中有一个功能是全盘扫描文件并显示每类文件的数目。刚开始使用单一线程，扫描速度简直惨不忍睹，换成多线程扫描以后，速度有较明显的提升，便封装了一个工具类，分享出来。  一、遇到的问题 首先描述一下遇到的问题:  1 . Android端全盘扫描文件 2 . 开一个子线程扫描太慢，使用多线程扫描 3 . 统计每一类文件的数目(比如:视频文件,图片文件">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-16T14:04:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android扫描文件并统计各类文件数目">
+<meta name="twitter:description" content="最近在模仿小米的文件管理器写一个自己的文件管理器，其中有一个功能是全盘扫描文件并显示每类文件的数目。刚开始使用单一线程，扫描速度简直惨不忍睹，换成多线程扫描以后，速度有较明显的提升，便封装了一个工具类，分享出来。  一、遇到的问题 首先描述一下遇到的问题:  1 . Android端全盘扫描文件 2 . 开一个子线程扫描太慢，使用多线程扫描 3 . 统计每一类文件的数目(比如:视频文件,图片文件">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.codekong.cn/2017/12/16/Android扫描文件并统计各类文件数目/"/>
+
+
+
+
+
+  <title>Android扫描文件并统计各类文件数目 | 代码控</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d828b53b3d89a2a12af4b9db0030499f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">代码控</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">夫唯不争,故莫能与之争</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2017/12/16/Android扫描文件并统计各类文件数目/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android扫描文件并统计各类文件数目</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-16T17:39:48+08:00">
+                2017-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近在模仿小米的文件管理器写一个自己的文件管理器，其中有一个功能是全盘扫描文件并显示每类文件的数目。刚开始使用单一线程，扫描速度简直惨不忍睹，换成多线程扫描以后，速度有较明显的提升，便封装了一个工具类，分享出来。</p>
+</blockquote>
+<h4 id="一、遇到的问题"><a href="#一、遇到的问题" class="headerlink" title="一、遇到的问题"></a>一、遇到的问题</h4><blockquote>
+<p>首先描述一下遇到的问题:</p>
+</blockquote>
+<p>1 . Android端全盘扫描文件</p>
+<p>2 . 开一个子线程扫描太慢，使用多线程扫描</p>
+<p>3 . 统计每一类文件的数目(比如:视频文件,图片文件,音频文件的数目)</p>
+<h4 id="二、解决思路"><a href="#二、解决思路" class="headerlink" title="二、解决思路"></a>二、解决思路</h4><blockquote>
+<p>接下来描述一下几个点的解决思路:</p>
+</blockquote>
+<p>1 . 首先目录的存储结构是树状结构，这里就设计到了树的遍历，这里我使用树的<code>层次遍历</code>，使用非递归方法实现，具体的遍历思路后面会有代码，这里只说明是借助于队列完成树的层次遍历。</p>
+<p>2 . 第二个思路便是我们需要传入的参数，这里其实涉及到的是数据的存储结构问题，这里我使用的数据结构如下:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&lt;<span class="built_in">String</span>&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>解释一下这个数据结构,map的key表示种类,value是个Set这个Set里面包含该种类的文件的后缀名。如下:</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, <span class="keyword">Set</span>&lt;String&gt;&gt; CATEGORY_SUFFIX <span class="comment">= new HashMap&lt;&gt;()</span>;</span><br><span class="line"><span class="keyword">Set</span>&lt;String&gt; <span class="keyword">set</span> <span class="comment">= new HashSet&lt;&gt;()</span>;</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"mp4"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"avi"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"wmv"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"flv"</span>);</span><br><span class="line">CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"video"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"txt"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"pdf"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"doc"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"docx"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"xls"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"xlsx"</span>);</span><br><span class="line">CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"document"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"jpg"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"jpeg"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"png"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"bmp"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"gif"</span>);</span><br><span class="line">CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"picture"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"mp3"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"ogg"</span>);</span><br><span class="line">CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"music"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"apk"</span>);</span><br><span class="line">CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"apk"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"zip"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"rar"</span>);</span><br><span class="line"><span class="keyword">set</span>.add(<span class="string">"7z"</span>);</span><br><span class="line">CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"zip"</span>, <span class="keyword">set</span>);</span><br></pre></td></tr></table></figure>
+<p>这里的后缀为什么使用Set来存储呢，主要是考虑到后面需要涉及到查找(获得一个文件的后缀，需要在查找属于哪个类别)，Set的查找效率比较高</p>
+<p>3 . 前面说了目录的遍历需要借助于队列进行层次遍历，又因为是多线程环境下，所以我们选用线程安全的队列<code>ConcurrentLinkedQueue</code></p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentLinkedQueue&lt;File&gt; mFileConcurrentLinkedQueue<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>4 . 还有需要将统计结果进行存储，这里我也选用了线程安全的HashMap</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> ConcurrentHashMap&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt; mCountResult;</span><br></pre></td></tr></table></figure>
+<p>这个Map的key表示文件种类，value表示该类文件的数目，由于涉及到多线程访问，所以选用了线程安全的<code>ConcurrentHashMap</code></p>
+<p>5 . 多线程问题，这里我选用了固定线程数目的线程池，最大线程数目是CPU核心数</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">final ExecutorService executorService</span> = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());</span><br></pre></td></tr></table></figure>
+<p>6 . 数据传递问题，由于Android不能在子线程更新UI，所以这里需要传入Handler，将最终统计结果传递到UI线程并显示</p>
+<h4 id="三、实战编码"><a href="#三、实战编码" class="headerlink" title="三、实战编码"></a>三、实战编码</h4><p>首先放上代码</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by 尚振鸿 on 17-12-16. 14:26</span></span><br><span class="line"><span class="comment"> * mail:szh@codekong.cn</span></span><br><span class="line"><span class="comment"> * 扫描文件并统计工具类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class ScanFileCountUtil &#123;</span><br><span class="line">    <span class="comment">//扫描目录路径</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">String</span> mFilePath;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//各个分类所对应的文件后缀</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;<span class="keyword">String</span>, Set&lt;<span class="keyword">String</span>&gt;&gt; mCategorySuffix;</span><br><span class="line">    <span class="comment">//最终的统计结果</span></span><br><span class="line">    <span class="keyword">private</span> ConcurrentHashMap&lt;<span class="keyword">String</span>, Integer&gt; mCountResult;</span><br><span class="line">    <span class="comment">//用于存储文件目录便于层次遍历</span></span><br><span class="line">    <span class="keyword">private</span> ConcurrentLinkedQueue&lt;<span class="built_in">File</span>&gt; mFileConcurrentLinkedQueue;</span><br><span class="line">    <span class="keyword">private</span> Handler mHandler = null;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> scanCountFile() &#123;</span><br><span class="line">        <span class="built_in">if</span> (mFilePath == null) &#123;</span><br><span class="line">            <span class="built_in">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        final <span class="built_in">File</span> file = <span class="keyword">new</span> <span class="built_in">File</span>(mFilePath);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//非目录或者目录不存在直接返回</span></span><br><span class="line">        <span class="built_in">if</span> (!file.<span class="built_in">exists</span>() || file.isFile()) &#123;</span><br><span class="line">            <span class="built_in">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//初始化每个类别的数目为0</span></span><br><span class="line">        <span class="built_in">for</span> (<span class="keyword">String</span> category : mCategorySuffix.keySet()) &#123;</span><br><span class="line">            <span class="comment">//将最后统计结果的key设置为类别</span></span><br><span class="line">            mCountResult.<span class="built_in">put</span>(category, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取到根目录下的文件和文件夹</span></span><br><span class="line">        final <span class="built_in">File</span>[] files = file.listFiles(<span class="keyword">new</span> FilenameFilter() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">boolean</span> accept(<span class="built_in">File</span> file, <span class="keyword">String</span> s) &#123;</span><br><span class="line">                <span class="comment">//过滤掉隐藏文件</span></span><br><span class="line">                <span class="built_in">return</span> !file.getName().startsWith(<span class="string">"."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//临时存储任务,便于后面全部投递到线程池</span></span><br><span class="line">        List&lt;Runnable&gt; runnableList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="comment">//创建信号量(最多同时有10个线程可以访问)</span></span><br><span class="line">        final Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">100</span>);</span><br><span class="line">        <span class="built_in">for</span> (<span class="built_in">File</span> f : files) &#123;</span><br><span class="line">            <span class="built_in">if</span> (f.<span class="built_in">isDirectory</span>()) &#123;</span><br><span class="line">                <span class="comment">//把目录添加进队列</span></span><br><span class="line">                mFileConcurrentLinkedQueue.offer(f);</span><br><span class="line">                <span class="comment">//创建的线程的数目是根目录下文件夹的数目</span></span><br><span class="line">                Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">run</span>() &#123;</span><br><span class="line">                        countFile();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;;</span><br><span class="line">                runnableList.add(runnable);</span><br><span class="line">            &#125; <span class="built_in">else</span> &#123;</span><br><span class="line">                <span class="comment">//找到该文件所属的类别</span></span><br><span class="line">                <span class="built_in">for</span> (Map.Entry&lt;<span class="keyword">String</span>, Set&lt;<span class="keyword">String</span>&gt;&gt; entry : mCategorySuffix.entrySet()) &#123;</span><br><span class="line">                    <span class="comment">//获取文件后缀</span></span><br><span class="line">                    <span class="keyword">String</span> suffix = f.getName().substring(f.getName().indexOf(<span class="string">"."</span>) + <span class="number">1</span>).toLowerCase();</span><br><span class="line">                    <span class="comment">//找到了</span></span><br><span class="line">                    <span class="built_in">if</span> (entry.getValue().contains(suffix)) &#123;</span><br><span class="line">                        mCountResult.<span class="built_in">put</span>(entry.<span class="built_in">getKey</span>(), mCountResult.<span class="built_in">get</span>(entry.<span class="built_in">getKey</span>()) + <span class="number">1</span>);</span><br><span class="line">                        <span class="built_in">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//固定数目线程池(最大线程数目为cpu核心数,多余线程放在等待队列中)</span></span><br><span class="line">        final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());</span><br><span class="line">        <span class="built_in">for</span> (Runnable runnable : runnableList) &#123;</span><br><span class="line">            executorService.submit(runnable);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//不允许再添加线程</span></span><br><span class="line">        executorService.<span class="built_in">shutdown</span>();</span><br><span class="line">        <span class="comment">//等待线程池中的所有线程运行完成</span></span><br><span class="line">        <span class="built_in">while</span> (true) &#123;</span><br><span class="line">            <span class="built_in">if</span> (executorService.isTerminated()) &#123;</span><br><span class="line">                <span class="built_in">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">try</span> &#123;</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//传递统计数据给UI界面</span></span><br><span class="line">        Message msg = Message.obtain();</span><br><span class="line">        msg.obj = mCountResult;</span><br><span class="line">        mHandler.sendMessage(msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 统计各类型文件数目</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> countFile() &#123;</span><br><span class="line">        <span class="comment">//对目录进行层次遍历</span></span><br><span class="line">        <span class="built_in">while</span> (!mFileConcurrentLinkedQueue.isEmpty()) &#123;</span><br><span class="line">            <span class="comment">//队头出队列</span></span><br><span class="line">            final <span class="built_in">File</span> tmpFile = mFileConcurrentLinkedQueue.poll();</span><br><span class="line">            final <span class="built_in">File</span>[] fileArray = tmpFile.listFiles(<span class="keyword">new</span> FilenameFilter() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">boolean</span> accept(<span class="built_in">File</span> file, <span class="keyword">String</span> s) &#123;</span><br><span class="line">                    <span class="comment">//过滤掉隐藏文件</span></span><br><span class="line">                    <span class="built_in">return</span> !file.getName().startsWith(<span class="string">"."</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="built_in">for</span> (<span class="built_in">File</span> f : fileArray) &#123;</span><br><span class="line">                <span class="built_in">if</span> (f.<span class="built_in">isDirectory</span>()) &#123;</span><br><span class="line">                    <span class="comment">//把目录添加进队列</span></span><br><span class="line">                    mFileConcurrentLinkedQueue.offer(f);</span><br><span class="line">                &#125; <span class="built_in">else</span> &#123;</span><br><span class="line">                    <span class="comment">//找到该文件所属的类别</span></span><br><span class="line">                    <span class="built_in">for</span> (Map.Entry&lt;<span class="keyword">String</span>, Set&lt;<span class="keyword">String</span>&gt;&gt; entry : mCategorySuffix.entrySet()) &#123;</span><br><span class="line">                        <span class="comment">//获取文件后缀</span></span><br><span class="line">                        <span class="keyword">String</span> suffix = f.getName().substring(f.getName().indexOf(<span class="string">"."</span>) + <span class="number">1</span>).toLowerCase();</span><br><span class="line">                        <span class="comment">//找到了</span></span><br><span class="line">                        <span class="built_in">if</span> (entry.getValue().contains(suffix)) &#123;</span><br><span class="line">                            mCountResult.<span class="built_in">put</span>(entry.<span class="built_in">getKey</span>(), mCountResult.<span class="built_in">get</span>(entry.<span class="built_in">getKey</span>()) + <span class="number">1</span>);</span><br><span class="line">                            <span class="comment">//跳出循环，不再查找</span></span><br><span class="line">                            <span class="built_in">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> class Builder &#123;</span><br><span class="line">        <span class="keyword">private</span> Handler mHandler;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">String</span> mFilePath;</span><br><span class="line">        <span class="comment">//各个分类所对应的文件后缀</span></span><br><span class="line">        <span class="keyword">private</span> Map&lt;<span class="keyword">String</span>, Set&lt;<span class="keyword">String</span>&gt;&gt; mCategorySuffix;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Builder(Handler handler) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mHandler = handler;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Builder setFilePath(<span class="keyword">String</span> filePath) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mFilePath = filePath;</span><br><span class="line">            <span class="built_in">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Builder setCategorySuffix(Map&lt;<span class="keyword">String</span>, Set&lt;<span class="keyword">String</span>&gt;&gt; categorySuffix) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCategorySuffix = categorySuffix;</span><br><span class="line">            <span class="built_in">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">void</span> applyConfig(ScanFileCountUtil scanFileCountUtil) &#123;</span><br><span class="line">            scanFileCountUtil.mFilePath = mFilePath;</span><br><span class="line">            scanFileCountUtil.mCategorySuffix = mCategorySuffix;</span><br><span class="line">            scanFileCountUtil.mHandler = mHandler;</span><br><span class="line">            scanFileCountUtil.mCountResult = <span class="keyword">new</span> ConcurrentHashMap&lt;<span class="keyword">String</span>, Integer&gt;(mCategorySuffix.<span class="built_in">size</span>());</span><br><span class="line">            scanFileCountUtil.mFileConcurrentLinkedQueue = <span class="keyword">new</span> ConcurrentLinkedQueue&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> ScanFileCountUtil create() &#123;</span><br><span class="line">            ScanFileCountUtil scanFileCountUtil = <span class="keyword">new</span> ScanFileCountUtil();</span><br><span class="line">            applyConfig(scanFileCountUtil);</span><br><span class="line">            <span class="built_in">return</span> scanFileCountUtil;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中关键的点都有注释或者是前面已经讲到了，下面说几点补充:</p>
+<p>1 . 必须要等所有线程运行结束才能向UI线程发送消息，这里使用了轮询的方式</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (executorService.isTerminated()) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2 . 由于上面的轮询会阻塞调用线程，所以调用应该放在子线程中</p>
+<p>3 . 上面工具类实例的创建使用到了建造者模式，不懂的可以看我的另一篇博客<br><a href="http://blog.csdn.net/bingjianit/article/details/53607856" target="_blank" rel="noopener">http://blog.csdn.net/bingjianit/article/details/53607856</a></p>
+<p>4 . 上面我创建的线程的数目是根目录下文件夹的数目，大家可以根据自己的需要调整</p>
+<h4 id="四、方便调用"><a href="#四、方便调用" class="headerlink" title="四、方便调用"></a>四、方便调用</h4><p>下面简单说一下如何调用上面的代码</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Handler mHandler = <span class="literal">new</span> Handler(Looper.getMainLooper())&#123;</span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> <span class="literal">void</span> handleMessage(Message msg) &#123;</span><br><span class="line">        <span class="comment">//接收结果</span></span><br><span class="line">        <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt; countRes = (<span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt;) msg.obj;</span><br><span class="line">        <span class="comment">//后续显示处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 扫描文件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">private void scanFile()&#123;</span><br><span class="line">    <span class="keyword">if</span> (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    final String path = Environment.getExternalStorageDirectory().getAbsolutePath();</span><br><span class="line"></span><br><span class="line">    final Map&lt;String, <span class="keyword">Set</span>&lt;String&gt;&gt; CATEGORY_SUFFIX <span class="comment">= new HashMap&lt;&gt;(FILE_CATEGORY_ICON.length)</span>;</span><br><span class="line">    <span class="keyword">Set</span>&lt;String&gt; <span class="keyword">set</span> <span class="comment">= new HashSet&lt;&gt;()</span>;</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"mp4"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"avi"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"wmv"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"flv"</span>);</span><br><span class="line">    CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"video"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"txt"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"pdf"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"doc"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"docx"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"xls"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"xlsx"</span>);</span><br><span class="line">    CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"document"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"jpg"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"jpeg"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"png"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"bmp"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"gif"</span>);</span><br><span class="line">    CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"picture"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"mp3"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"ogg"</span>);</span><br><span class="line">    CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"music"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"apk"</span>);</span><br><span class="line">    CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"apk"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span> = new <span class="comment">HashSet&lt;&gt;()</span>;</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"zip"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"rar"</span>);</span><br><span class="line">    <span class="keyword">set</span>.add(<span class="string">"7z"</span>);</span><br><span class="line">    CATEGORY_SUFFIX.<span class="keyword">put</span>(<span class="string">"zip"</span>, <span class="keyword">set</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//单一线程线程池</span></span><br><span class="line">    ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();</span><br><span class="line">    singleExecutorService.submit(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="comment">//构建对象</span></span><br><span class="line">            ScanFileCountUtil scanFileCountUtil = new ScanFileCountUtil</span><br><span class="line">                    .Builder(mHandler)</span><br><span class="line">                    .setFilePath(path)</span><br><span class="line">                    .setCategorySuffix(CATEGORY_SUFFIX)</span><br><span class="line">                    .create();</span><br><span class="line">            scanFileCountUtil.scanCountFile();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="五、后记"><a href="#五、后记" class="headerlink" title="五、后记"></a>五、后记</h4><blockquote>
+<p>刚开始我是采用单线程扫描，扫描时间差不多是3分钟，经过使用多线程以后，扫描时间缩短到30-40秒。对了，上面的程序要想在Android中顺利运行还需要添加访问SD卡的权限和注意Android6.0的动态权限申请。</p>
+</blockquote>
+<p>如果觉得不错，可以关注我，也可以去GitHub看看我的文件管理器，正在不断完善中，地址:<br><a href="https://github.com/codekongs/FileExplorer/" target="_blank" rel="noopener">https://github.com/codekongs/FileExplorer/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/02/设计模式六大原则之单一职责原则/" rel="next" title="设计模式六大原则之单一职责原则">
+                <i class="fa fa-chevron-left"></i> 设计模式六大原则之单一职责原则
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/01/Kotlin系列之Kotlin简介/" rel="prev" title="Kotlin系列之Kotlin简介">
+                Kotlin系列之Kotlin简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="冰鉴IT" />
+            
+              <p class="site-author-name" itemprop="name">冰鉴IT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/bingjianit" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-edit"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/d45a57e50ce5" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/codekongs" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:szh@codekong.cn" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、遇到的问题"><span class="nav-number">1.</span> <span class="nav-text">一、遇到的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、解决思路"><span class="nav-number">2.</span> <span class="nav-text">二、解决思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、实战编码"><span class="nav-number">3.</span> <span class="nav-text">三、实战编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、方便调用"><span class="nav-number">4.</span> <span class="nav-text">四、方便调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#五、后记"><span class="nav-number">5.</span> <span class="nav-text">五、后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冰鉴IT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
