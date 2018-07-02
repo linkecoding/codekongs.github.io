@@ -305,6 +305,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2018/07/02/Kotlin系列之伴生对象/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/02/Kotlin系列之伴生对象/" itemprop="url">Kotlin系列之伴生对象</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-02T20:15:40+08:00">
+                2018-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>上一节中说到了对象声明，这次我们聊聊对象声明的一种特殊情况，对象声明在一个类内部，也就是标题所说的伴生对象。</p>
+</blockquote>
+<p>伴生对象最简单直白的理解就是与一个类相伴而生的对象，由于它处于类内部，所以必然和包含它的类存在某种联系。</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>伴生对象使用关键字<strong>companion</strong>来声明，看起来就像是在object关键字前面加的一个修饰符。它的一般格式如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class 外部类名&#123;</span><br><span class="line">  companion object 伴生对象名&#123;</span><br><span class="line">      //属性</span><br><span class="line">      //方法</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的代码示例如下:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">            println(<span class="string">"Companion Object..."</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你会发现上面的代码中没有伴生对象名，因为它是可以省略的。下面就依次看看伴生对象都用在那些地方。</p>
+<h4 id="弥补static关键字缺憾"><a href="#弥补static关键字缺憾" class="headerlink" title="弥补static关键字缺憾"></a>弥补static关键字缺憾</h4><p>在Java中有static关键字表示静态成属性和方法，但在Kotlin中没有static关键字，所以伴生对象和顶层函数一起来弥补了这一缺憾，还是看上面给出的第一个例子，那我们怎么去调用伴生对象中的方法呢。</p>
+<p>上面的代码连伴生对象的名字都省略了，所以我们只能通过外部类来调用。格式如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">外部类.伴生对象内部方法</span><br></pre></td></tr></table></figure>
+<p>如下所示:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    A.test()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然对于指定了伴生对象名的情况，调用格式如下:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">外部类.伴生对象名.伴生对象内部方法</span><br></pre></td></tr></table></figure>
+<p>代码示例如下:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> KB&#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">testB</span><span class="params">()</span></span>&#123;</span><br><span class="line">            println(<span class="string">"Companion Object..."</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    B.testB()</span><br><span class="line">    B.KB.testB()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然你会发现，你在调用时仍然可以省略掉伴生对象名，就像Java中通过类名直接调用静态方法一样。<br>当然，对于在声明时省略了伴生对象名的情况，Kotlin也提供了一个叫<strong>Companion</strong>的默认名称，所以我们也可以像下面的方式进行调用:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">            println(<span class="string">"Companion Object..."</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    A.test()</span><br><span class="line">    <span class="comment">//默认名称</span></span><br><span class="line">    A.Companion.test()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实伴生对象的出现也是为了弥补顶层函数的不足，顶层函数不能访问一个类中的private成员，而伴生对象是可以访问的，如下面代码所示:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> age: <span class="built_in">Int</span> = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">out</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//伴生对象中可以调用外部的私有成员</span></span><br><span class="line">            println(C().age)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//顶层函数不能调用外部类的私有成员</span></span><br><span class="line">    println(C().age) <span class="comment">//报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="实现接口"><a href="#实现接口" class="headerlink" title="实现接口"></a>实现接口</h4><p>伴生对象在声明的时候可以像其他类那样实现接口，并实现接口中的方法，如下面的代码所示:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span></span>(<span class="keyword">val</span> name: String)&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//伴生对象实现接口</span></span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> : Log&#123;</span><br><span class="line">        <span class="comment">//实现接口的方法</span></span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">printLog</span><span class="params">(msg: <span class="type">String</span>)</span></span> &#123;</span><br><span class="line">            println(<span class="string">"msg ------- <span class="variable">$msg</span>"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//该方法的参数是接口实例</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">callLog</span><span class="params">(log: <span class="type">Log</span>)</span></span>&#123;</span><br><span class="line">    log.printLog(<span class="string">"msg"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="comment">//传入实现接口的伴生对象的类</span></span><br><span class="line">    callLog(People)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码可以这样理解，伴生对象实现了接口，伴生对象又与外部类存在关联，所以相当于外部类也实现了接口，所以我们可直接传入外部类的名称，这里的这个名称就指代了那个伴生对象。</p>
+<h4 id="伴生对象扩展"><a href="#伴生对象扩展" class="headerlink" title="伴生对象扩展"></a>伴生对象扩展</h4><p>在前面的内容中我们也说过方法扩展，那这里我们的伴生对象也可以进行扩展，我们可以在其上扩展我们自己的方法。这里所谓的扩展就是在声明伴生对象的时候没有指定函数，而是在类的外部来给伴生对象增加方法，来看看下面的代码示例:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>(<span class="keyword">val</span> name: String)&#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="comment">//伴生对象内部没有方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//伴生对象扩展方法</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Person.Companion.<span class="title">toJson</span><span class="params">(person: <span class="type">Person</span>)</span></span>: String&#123;</span><br><span class="line">    <span class="comment">//具体实现</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="comment">//调用方法</span></span><br><span class="line">    <span class="keyword">val</span> str = Person.toJson(Person(<span class="string">"小白"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的扩展方法和函数的扩展差别不大，主要是要访问到扩展对象再在其上扩展方法。</p>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>这一节的伴生对象，总觉得还是有点绕，而且使用场景比较多，容易出错，后续待理解更加深入了会再写文章介绍。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2018/07/02/Kotlin系列之对象声明/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1606,152 +1753,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2018/02/01/Kotlin系列之继承相关修饰符/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冰鉴IT">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="代码控">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/01/Kotlin系列之继承相关修饰符/" itemprop="url">Kotlin系列之继承相关修饰符</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-01T01:02:50+08:00">
-                2018-02-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
-                    <span itemprop="name">Kotlin</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          “Kotlin同Java一样也有一些针对类、成员、和方法的修饰符，今天我们先看看和继承相关的几个修饰符。”
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/01/Kotlin系列之继承相关修饰符/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1806,7 +1807,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
