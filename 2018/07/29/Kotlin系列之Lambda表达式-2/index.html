@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="代码控" />
+  <meta name="keywords" content="Kotlin," />
 
 
 
@@ -81,13 +81,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="代码控">
-<meta property="og:url" content="http://www.codekong.cn/archives/2017/03/index.html">
+<meta name="description" content="“今天学习一下Kotlin中Lambda表达式第二部分。”">
+<meta name="keywords" content="Kotlin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin系列之Lambda表达式(2)">
+<meta property="og:url" content="http://www.codekong.cn/2018/07/29/Kotlin系列之Lambda表达式-2/index.html">
 <meta property="og:site_name" content="代码控">
+<meta property="og:description" content="“今天学习一下Kotlin中Lambda表达式第二部分。”">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-29T09:53:09.903Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="代码控">
+<meta name="twitter:title" content="Kotlin系列之Lambda表达式(2)">
+<meta name="twitter:description" content="“今天学习一下Kotlin中Lambda表达式第二部分。”">
 
 
 
@@ -117,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.codekong.cn/archives/2017/03/"/>
+  <link rel="canonical" href="http://www.codekong.cn/2018/07/29/Kotlin系列之Lambda表达式-2/"/>
 
 
 
 
 
-  <title>归档 | 代码控</title>
+  <title>Kotlin系列之Lambda表达式(2) | 代码控</title>
   
 
 
@@ -152,7 +157,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -290,73 +295,222 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-         
-          
-        好! 目前共计 51 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.codekong.cn/2018/07/29/Kotlin系列之Lambda表达式-2/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冰鉴IT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="代码控">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/03/07/链表实现两个多项式的加法/" itemprop="url">
-              
-                <span itemprop="name">链表实现两个多项式的加法</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Kotlin系列之Lambda表达式(2)</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-07T19:54:16+08:00"
-              content="2017-03-07" >
-          03-07
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-29T17:47:55+08:00">
+                2018-07-29
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
+                    <span itemprop="name">Kotlin</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  “今天学习一下Kotlin中Lambda表达式第二部分。”
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <blockquote>
+<p>上一篇文章讲到了最基本的Lambda表达式，今天这篇文章继续讲Lambda表达式中的在作用域中访问变量。</p>
+</blockquote>
+<h5 id="Java中的内部类访问变量"><a href="#Java中的内部类访问变量" class="headerlink" title="Java中的内部类访问变量"></a>Java中的内部类访问变量</h5><p>当我们在函数内部使用匿名内部类时，我们可以在匿名内部类内使用函数的参数和函数内的局部变量。当我们在使用Lambda表达式时，我们也可以访问这个函数的参数和使用那些在Lambda表达式之前定义的变量。</p>
+<p>下面先看一个在Java中匿名内部类中访问函数参数和局部变量的例子。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> search() &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">String</span> <span class="built_in">str</span> = <span class="string">"xxxx"</span>;</span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">                System.out.<span class="built_in">println</span>(<span class="built_in">str</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的这个例子中局部变量<strong>str</strong>在匿名内部类中被使用，所以必须要加final修饰符。</p>
+<p>如果你使用的JDK是Java8版本，那你会发现你不写final修饰符也是不会报错的。这因为Java8中final修饰符不是必需的，但是如果你尝试在内部类中更改str的值，IDE就会告诉你，在匿名内部类中使用的局部变量是final的，不可以被修改。所以在Java8中如果你没有尝试去修改那个值，final修饰符是可以省略的。</p>
+<p>那为什么在Java中匿名内部类中使用的变量必须是final类型呢？这里涉及到一个作用域的问题。str多的作用域是search()这个函数，函数运行结束，那这个局部变量就消失了，但是我们的匿名内部类的执行时机并不是在search()函数执行完成前，可能search()函数已经结束了，匿名内部类线程才会执行，如果这时候str不是final类型，它就已经被回收了，当线程类执行的时候就会找不到这个变量而报错。如果使用final修饰符，Java就会复制一份这个变量作为内部类的成员变量，由于是final修饰的，还保证了这份复制过来的变量不会被篡改，使内部类和外部类的变量保持一致性。</p>
+<h5 id="Kotlin在作用域中访问变量"><a href="#Kotlin在作用域中访问变量" class="headerlink" title="Kotlin在作用域中访问变量"></a>Kotlin在作用域中访问变量</h5><p>上面解释了Java中匿名内部类中变量访问的情况及原理，其实把上面的匿名内部类换成Lambda表达式也可以做同样的事，达到同样的效果。<br>那下面看看在Kotlin中使用Lambda表达式访问作用域中的变量的规则。</p>
+<p>在Kotlin中在Lambda表达式内部可以访问外部的变量，而无需声明为final，而且在Lambda内部可以修改这些变量。下面看一个示例</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">countThings</span><span class="params">(datas : <span class="type">List</span>&lt;<span class="type">Int</span>&gt;)</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> count = <span class="number">0</span></span><br><span class="line">    datas.forEach &#123;</span><br><span class="line">        <span class="keyword">if</span> (it == <span class="number">0</span>)&#123;</span><br><span class="line">            count++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    print(<span class="string">"count = <span class="variable">$count</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码forEach里面传递的就是一个Lambda表达式，对于局部变量count并没有被声明为final，同时这个变量还可以在Lambda表达式内部被修改。</p>
+<p>与Java比起来这是不是有点不可思议，那Kotlin是怎么做到的。</p>
+<p>在分析之前我们先来看一下，加入我们在Java中是如何实现匿名内部类中修改外部变量的值的。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> search() &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">String</span>[] <span class="built_in">str</span> = &#123;<span class="string">"xxxx"</span>&#125;;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="built_in">str</span>[<span class="number">0</span>] = <span class="built_in">str</span>[<span class="number">0</span>] + <span class="string">"|"</span> + i;</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="built_in">str</span>[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码中Java为了让我们让匿名内部类可以修改外部的变量，我们创建了一个单元素的数组，并声明为final类型。这样虽然str数组是final的，但它其中的元素却是可以修改的，这样就既保证了匿名内部类从函数中复制到匿名内部类内部的变量是不可变的，又保证了我们可以在匿名内部类中修改这个变量值。</p>
+<p>Java除了使用上面的方法解决这个问题外，还有一种方法如下<br><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void search<span class="literal">()</span> &#123;</span><br><span class="line">    final <span class="type">Ref</span>&lt;<span class="type">String</span>&gt; <span class="built_in">ref</span> = <span class="keyword">new</span> <span class="type">Ref</span>&lt;&gt;(<span class="string">"xxxx"</span>);</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>(<span class="literal">()</span> -&gt; &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="built_in">ref</span>.<span class="keyword">value</span>= <span class="built_in">ref</span>.<span class="keyword">value</span> + <span class="string">"|"</span> + i;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="built_in">ref</span>.<span class="keyword">value</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start<span class="literal">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">static <span class="keyword">class</span> <span class="type">Ref</span>&lt;<span class="type">T</span>&gt;&#123;</span><br><span class="line">    <span class="type">T</span> <span class="keyword">value</span>;</span><br><span class="line">    public  <span class="type">Ref</span>(<span class="type">T</span> <span class="keyword">value</span>)&#123;</span><br><span class="line">        this.<span class="keyword">value</span> = <span class="keyword">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码中我们使用了一个静态内部类，虽然静态内部类的引用是final类型的，但我们却可以修改它内部的value属性，也就达到了在Lambda表达式中修改外部变量的目的。</p>
+<p>其实上面的这种方法，正是Kotlin使用的方法。Kotlin内部就是通过这样的方法使我们可以在Lambda内部修改外部的变量。只是不需要我们显式去创建这样的包装器类。</p>
+<p>所以用专业一点的术语解释就是，默认情况下，局部变量的声明周期是被限制在了声明这个变量的函数中，但是如果它在Lambda内部被使用了，我们就称它被Lambda捕获了，这时候，使用这个变量的代码就会被存储并稍后执行。当捕获了一个final变量时，它的值就会和使用这个值的Lambda表达式一起被存储，如果对非final变量，它的值就像上面演示的一样被封装在一个包装器内部，这样这个值就可以被改变，同时会被这个包装器类的引用和Lambda代码一起存储。</p>
+<p>说白了，就是如果你只是在Lambda内部使用这个值而不修改它，那就复制一份它的值到Lambda表达式内部，如果你在Lambda内部使用它，那Kotlin就会创建一个包装器类，同时把这个包装器类的引用复制到Lambda表达式内部方便你修改它。</p>
+<h5 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h5><p>本节涉及到的这个只是点还是蛮重要的，但是Kotlin已经帮我们隐藏了背后的实现细节，但我觉得背后的原因还是有必要搞清楚的。</p>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果博客对您有帮助,不妨请我喝杯咖啡...</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="冰鉴IT 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="冰鉴IT 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/10/Kotlin系列之Lambda表达式-1/" rel="next" title="Kotlin系列之Lambda表达式(1)">
+                <i class="fa fa-chevron-left"></i> Kotlin系列之Lambda表达式(1)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -364,6 +518,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -384,8 +542,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -484,6 +651,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Java中的内部类访问变量"><span class="nav-number">1.</span> <span class="nav-text">Java中的内部类访问变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Kotlin在作用域中访问变量"><span class="nav-number">2.</span> <span class="nav-text">Kotlin在作用域中访问变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -617,6 +800,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
